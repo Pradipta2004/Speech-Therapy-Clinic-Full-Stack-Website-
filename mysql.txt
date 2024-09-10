@@ -1,0 +1,92 @@
+-- MySQL code for patient database
+CREATE DATABASE speech_therapy_clinic_patient;
+USE speech_therapy_clinic_patient;
+
+CREATE TABLE patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fullname VARCHAR(100),
+    gender VARCHAR(10),
+    contact VARCHAR(15),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
+);
+
+-- MySQL code for therapist database
+CREATE DATABASE speech_therapy_clinic_therapist;
+USE speech_therapy_clinic_therapist;
+
+CREATE TABLE therapists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fullname VARCHAR(100),
+    dob DATE,
+    gender VARCHAR(10),
+    contact VARCHAR(15),
+    license VARCHAR(50),
+    education VARCHAR(100),
+    experience VARCHAR(50),
+    specialization VARCHAR(100),
+    certificate VARCHAR(255),
+    photo VARCHAR(255),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
+);
+
+-- MySQL code for supervisor database
+CREATE DATABASE speech_therapy_clinic_supervisor;
+USE speech_therapy_clinic_supervisor;
+
+CREATE TABLE supervisors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fullname VARCHAR(100),
+    dob DATE,
+    gender VARCHAR(10),
+    contact VARCHAR(15),
+    license VARCHAR(50),
+    education VARCHAR(100),
+    experience VARCHAR(50),
+    specialization VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(255)
+);
+
+--MySQL code for pending appointment database
+CREATE DATABASE IF NOT EXISTS speech_therapy_clinic_pending_appointment;
+
+USE speech_therapy_clinic_pending_appointment;
+
+CREATE TABLE IF NOT EXISTS pending_appointment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    patient_name VARCHAR(255) NOT NULL,
+    patient_phone VARCHAR(15) NOT NULL,
+    preferred_date DATE NOT NULL,
+    preferred_time TIME NOT NULL,
+    disease VARCHAR(255) NOT NULL,
+    about TEXT NOT NULL,
+    therapist_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+--for creating rating column 
+
+ALTER TABLE approved_therapists
+ADD COLUMN rating INT(1) NULL;
+
+--for creating  scheduled approval 
+CREATE DATABASE IF NOT EXISTS speech_therapy_clinic_scheduled_appointment;
+
+USE speech_therapy_clinic_scheduled_appointment;
+
+CREATE TABLE scheduled_appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pending_appointment_id INT,
+    scheduled_date DATE,
+    scheduled_time TIME,
+    FOREIGN KEY (pending_appointment_id) REFERENCES pending_appointment(id) ON DELETE CASCADE
+);
+
+
+
+
+

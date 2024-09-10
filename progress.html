@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy Progress</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f9;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        #charts-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+
+        .chart-container {
+            width: 32%;
+            box-sizing: border-box;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .profile-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .profile-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .toggle-button {
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            background: #007bff;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-button::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.3s;
+        }
+
+        .toggle-button.dark::after {
+            transform: translateX(30px);
+        }
+
+        .toggle-button.dark {
+            background: #333;
+            /* color: white; */
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .chart-container {
+            background: #1f1f1f;
+        }
+        .dark-mode .sentence {
+            /* background: #1f1f1f; */
+            color: white;
+        }
+
+        .logos-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+
+
+        .profile-button-round {
+            margin: 0 auto;
+            display: block;
+        }
+        .profile-button-round {
+            position: fixed;
+            top: 15px;
+            right: 100px;
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 2;
+            transition: background-color 0.3s ease;
+        }
+        .profile-button-round:hover {
+            background-color: #1a496b;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            top: 15px;
+            right: 15px;
+            width: 320px;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        .modal-content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .close {
+            color: #333;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #2b6cb0;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .profile-info {
+            margin-top: 20px;
+        }
+        .profile-info .profile-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-info .profile-icon i {
+            font-size: 60px;
+            color: #2b6cb0;
+        }
+        .profile-info p {
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .profile-info p strong {
+            color: #2b6cb0;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="sentence">Speech Therapy Progress Tracker</h1>
+
+    <div class="button-container">
+        <button onclick="plotBarChart()">Plot Bar Chart</button>
+        <button onclick="plotPieChart()">Plot Pie Chart</button>
+        <button onclick="plotCircularProgress()">Plot Progress Circle</button>
+    </div>
+
+    <div id="charts-wrapper">
+        <div id="bar-chart-container" class="chart-container">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div id="pie-chart-container" class="chart-container">
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div id="circular-chart-container" class="chart-container">
+            <canvas id="circularChart" width="200" height="200"></canvas>
+        </div>
+    </div>
+    
+    <div class="toggle-container">
+    <button class="profile-button-round" onclick="showModal()">P</button>
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+             <h2>Profile Details</h2>
+            <div class="profile-info">
+                <div class="profile-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <p><strong>Name: John Doe</strong></p>
+                <p><strong>Email: john.doe@example.com</strong></p>
+                <p><strong>Age: 28</strong></p>
+                <p><strong>Location: New York</strong></p>
+            </div> 
+        </div>
+    </div>
+    <div class="toggle-button" onclick="toggleTheme()"></div>
+</div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function getRandomData(count) {
+        return Array.from({length: count}, () => Math.floor(Math.random() * 100) + 1);
+    }
+
+
+
+    function showModal() {
+            var profileButton = document.querySelector('.profile-button-round');
+            var modal = document.getElementById("profileModal");
+            var rect = profileButton.getBoundingClientRect();
+            
+            modal.style.top = (rect.top + window.scrollY + 40) + 'px';
+            modal.style.right = (window.innerWidth - rect.right) + 'px';
+            modal.style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById("profileModal").style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("profileModal")) {
+                document.getElementById("profileModal").style.display = "none";
+            } else if (!event.target.matches('.three-dot-menu')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+
+
+    function plotBarChart() {
+        const ctx = document.getElementById('barChart').getContext('2d');
+        const data = {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+            datasets: [
+                {
+                    label: 'Fluency',
+                    data: getRandomData(5),
+                    backgroundColor: document.body.classList.contains('dark-mode') ? '#66c2a5' : '#007bff',
+                },
+                {
+                    label: 'Articulation',
+                    data: getRandomData(5),
+                    backgroundColor: document.body.classList.contains('dark-mode') ? '#fc8d62' : '#28a745',
+                },
+                {
+                    label: 'Phonation',
+                    data: getRandomData(5),
+                    backgroundColor: document.body.classList.contains('dark-mode') ? '#8da0cb' : '#ffc107',
+                },
+                {
+                    label: 'Comprehension',
+                    data: getRandomData(5),
+                    backgroundColor: document.body.classList.contains('dark-mode') ? '#e78ac3' : '#dc3545',
+                }
+            ]
+        };
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    function plotPieChart() {
+        const ctx = document.getElementById('pieChart').getContext('2d');
+        const data = {
+            labels: ['Exercises Completed', 'Exercises Pending', 'Goals Achieved'],
+            datasets: [{
+                data: getRandomData(3),
+                backgroundColor: document.body.classList.contains('dark-mode') ? ['#66c2a5', '#fc8d62', '#8da0cb'] : ['#28a745', '#ffc107', '#dc3545'],
+            }]
+        };
+        new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    }
+
+    function plotCircularProgress() {
+        const ctx = document.getElementById('circularChart').getContext('2d');
+        const data = getRandomData(1)[0];
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Progress', 'Remaining'],
+                datasets: [{
+                    data: [data, 100 - data],
+                    backgroundColor: document.body.classList.contains('dark-mode') ? ['#17a2b8', '#343a40'] : ['#17a2b8', '#e9ecef'],
+                    borderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    title: {
+                        display: true,
+                        text: `Overall Progress: ${data}%`,
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        },
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        document.querySelector('.toggle-button').classList.toggle('dark');
+    }
+
+    function toggleProfileDropdown() {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+    }
+</script>
+
+</body>
+</html>

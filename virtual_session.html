@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Therapy Sessions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #333;
+            color: #f0f2f5;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .container {
+            background-color: #444;
+        }
+
+        .appointment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .appointment-item {
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-info {
+            font-size: 1rem;
+        }
+
+        .appointment-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .appointment-button:hover {
+            background-color: #218838;
+        }
+
+        body.dark-mode .appointment-button {
+            background-color: #1e7e34;
+        }
+
+        #no-session-message {
+            display: none;
+            padding: 1rem;
+            background: #ff4d4d;
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        /* Toggle Button Styles */
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .toggle-slider {
+            width: 50px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 12px;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .toggle-slider {
+            background-color: #007bff;
+        }
+
+        body.dark-mode .toggle-slider::before {
+            transform: translateX(26px);
+        }
+
+        /* Profile Button Styles */
+        .profile-button {
+            position: absolute;
+            top: 1rem;
+            right: 4rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 3rem;
+            right: 4rem;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f0f2f5;
+        }
+
+        .profile-dropdown a:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Virtual Therapy Sessions</h1>
+        <div class="theme-toggle" onclick="toggleTheme()">
+            <div class="toggle-slider"></div>
+        </div>
+        <button class="profile-button" onclick="toggleProfileDropdown()">Profile</button>
+        <div id="profile-dropdown" class="profile-dropdown">
+            <a href="#">Name: John Doe</a>
+            <a href="#">Email: john@example.com</a>
+            <a href="#">Log Out</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h2>Upcoming Appointments</h2>
+        <ul id="appointment-list" class="appointment-list">
+            <!-- Appointment items will be inserted here by JavaScript -->
+        </ul>
+    </div>
+    
+    <div id="no-session-message">
+        No session is going on.
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const appointments = [
+                { id: '001', therapist: 'Dr. Smith, PhD', date: '2024-09-03', startTime: '10:00', endTime: '11:00' },
+                { id: '002', therapist: 'Dr. Johnson, MD', date: '2024-09-03', startTime: '13:00', endTime: '23:00' },
+                { id: '003', therapist: 'Dr. Lee, PsyD', date: '2024-09-04', startTime: '09:00', endTime: '10:00' },
+                { id: '004', therapist: 'Dr. Patel, MFT', date: '2024-09-05', startTime: '11:00', endTime: '12:00' },
+                { id: '005', therapist: 'Dr. Garcia, LCSW', date: '2024-09-09', startTime: '10:00', endTime: '17:00' }
+            ];
+
+            const appointmentList = document.getElementById('appointment-list');
+            const noSessionMessage = document.getElementById('no-session-message');
+
+            const now = new Date();
+            const currentDate = now.toISOString().split('T')[0];
+            const currentTime = now.toTimeString().split(' ')[0].substr(0, 5);
+            
+            let sessionAvailable = false;
+
+            appointments.forEach(appt => {
+                const apptDate = appt.date;
+                const apptStart = appt.startTime;
+                const apptEnd = appt.endTime;
+
+                if (apptDate === currentDate && currentTime >= apptStart && currentTime <= apptEnd) {
+                    sessionAvailable = true;
+                }
+
+                const listItem = document.createElement('li');
+                listItem.className = 'appointment-item';
+                listItem.innerHTML = `
+                    <div class="appointment-info">
+                        <strong>Therapist:</strong> ${appt.therapist}<br>
+                        <strong>Session ID:</strong> ${appt.id}<br>
+                        <strong>Date:</strong> ${appt.date}<br>
+                        <strong>Time:</strong> ${appt.startTime} - ${appt.endTime}
+                    </div>
+                    ${apptDate === currentDate && currentTime >= apptStart && currentTime <= apptEnd ? 
+                        `<button class="appointment-button" onclick="startSession()">Start Session</button>` 
+                        : 
+                        `<button class="appointment-button" disabled>Not Available</button>`
+                    }
+                `;
+                appointmentList.appendChild(listItem);
+            });
+
+            if (!sessionAvailable) {
+                noSessionMessage.style.display = 'block';
+            }
+
+            window.startSession = function () {
+                if (sessionAvailable) {
+                    window.open('videocall.html', 'VideoCallWindow', 'width=800,height=600');
+                }
+            };
+        });
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close profile dropdown if clicked outside
+        document.addEventListener('click', function(event) {
+            const isClickInside = document.querySelector('.profile-button').contains(event.target);
+            if (!isClickInside) {
+                document.getElementById('profile-dropdown').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

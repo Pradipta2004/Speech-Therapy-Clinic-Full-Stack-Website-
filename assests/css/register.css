@@ -1,0 +1,269 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+:root {
+  --primary-color: #12ac8e;
+  --primary-color-dark: #0d846c;
+  --primary-color-light: #e9f7f7;
+  --secondary-color: #fb923c;
+  --text-dark: #333333;
+  --text-light: #767268;
+  --white: #ffffff;
+  --max-width: 1200px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  /*margin: 0;
+  padding: 0;*/
+}
+
+body {
+/*  background-color: #DFF2F1;*/
+/*    background-color: #8DA1A6;*/
+    background-color: #CAD5D8;
+/*  color: #ffffff;*/
+  font-family: "Poppins", sans-serif;
+}
+
+/*header content*/
+.registration_header_container {
+    margin-top: 30px !important;
+    margin-left: 700px !important;
+    height: 200px !important;
+}
+
+.registration_header_container h2 {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.user_selection_dropdown {
+    text-align: center;
+}
+
+.user_selection_dropdown select {
+    margin-top: 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2) !important; 
+    backdrop-filter: blur(18px) !important; 
+    background-color: rgba(255, 255, 255, 0.2) !important; 
+}
+
+.user_selection_dropdown:after {
+    content: '\25BC'; /* Down arrow */
+    font-size: 16px;
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    pointer-events: none; /* Make sure clicking on arrow still opens dropdown */
+    color: #007bff;  /* Same color as border */
+        }
+
+        /* Style for the dropdown options */
+.user_selection_dropdown select option {
+    padding: 10px;
+    font-size: 16px;
+    box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2) !important; 
+    backdrop-filter: blur(18px) !important; 
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Optional: Add a hover effect on the dropdown */
+.user_selection_dropdown select:hover {
+    border-color: #0056b3;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  outline: none;
+  border: none;
+  font-size: 1rem;
+  white-space: nowrap;
+  color: var(--white);
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+/*better buttons*/
+ /* button */
+  .btn1 {
+    margin: 15px;
+    padding: 15px 40px;
+    border: none;
+    outline: none;
+    color: #FFF;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 12px;
+  }
+  .btn1::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+  }
+  /* glow */
+  .btn1::before {
+    content: "";
+    background: linear-gradient(
+      45deg,
+      #FF0000, #FF7300, #FFFB00, #48FF00,
+      #00FFD5, #002BFF, #FF00C8, #FF0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 600%;
+    z-index: -1;
+    width: calc(100% + 4px);
+    height:  calc(100% + 4px);
+    filter: blur(8px);
+    animation: glowing 20s linear infinite;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+    opacity: 0;
+  }
+  
+  @keyframes glowing {
+    0% {background-position: 0 0;}
+    50% {background-position: 400% 0;}
+    100% {background-position: 0 0;}
+  }
+  
+  /* hover */
+  .btn1:hover::before {
+    opacity: 1;
+  }
+  
+  .btn1:active:after {
+    background: transparent;
+  }
+  
+  .btn1:active {
+    color: #000;
+    font-weight: bold;
+  }
+
+/*login and reg card*/
+.card {
+    box-shadow: 0 15px 25px rgba(129, 124, 124, 0.2) !important; 
+    backdrop-filter: blur(18px) !important; 
+    background-color: rgba(255, 255, 255, 0.2) !important; 
+    height: 1250px;
+    width: 1200px;
+    margin-left: 500px;
+    margin-top: 100px;
+}
+/* Global settings to ensure responsiveness */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Make text and images scale responsively */
+body {
+  font-size: 100%;
+  line-height: 1.6;
+  font-family: Arial, sans-serif;
+}
+
+/* Make images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fluid grid layout for containers */
+.container {
+  width: 100%;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.column {
+  padding: 15px;
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Media queries for responsiveness */
+@media only screen and (max-width: 1200px) {
+  .container {
+      width: 95%;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .container {
+      width: 90%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  /* Stack columns vertically on smaller screens */
+  .column {
+      flex: 100%;
+  }
+
+  body {
+      font-size: 90%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .container {
+      width: 100%;
+  }
+
+  body {
+      font-size: 85%;
+  }
+}
+
+/* Example of flexible buttons */
+button {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  margin: 10px auto;
+  display: block;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

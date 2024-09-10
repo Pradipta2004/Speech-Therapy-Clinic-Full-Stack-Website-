@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Catalog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .map-container {
+            width: 100%;
+            height: 450px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin: 0 10px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .search-bar {
+            width: 60%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .catalog {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px;
+        }
+        .doctor-card {
+            width: 300px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .doctor-card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .doctor-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .doctor-card .rating {
+            font-weight: bold;
+            color: #f39c12;
+        }
+        .doctor-card .location {
+            color: #3498db;
+        }
+
+
+
+        .catalog-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .catalog-item {
+            width: 200px;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s;
+        }
+        .catalog-item:hover {
+            transform: translateY(-10px);
+        }
+        .catalog-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .catalog-content {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+        }
+        .catalog-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+        }
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .footer-section {
+            width: 30%;
+            margin-bottom: 20px;
+        }
+        .footer-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #f39c12;
+        }
+        .footer-section p {
+            margin: 5px 0;
+            color: #ccc;
+        }
+        .footer-section a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+        .footer-section a:hover {
+            text-decoration: underline;
+        }
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-section ul li {
+            margin: 5px 0;
+        }
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+        .social-icons a {
+            margin: 0 10px;
+            display: inline-block;
+        }
+        .social-icons img {
+            width: 24px;
+            height: 24px;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding: 10px;
+            background-color: #222;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7365.7575066904!2d88.41357609095535!3d22.62100241782883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f89e1a66c9b6ad%3A0x444ce222df62a024!2sNagerbazar%2C%20Kamardanga%2C%20Kolkata%2C%20West%20Bengal%20700028!5e0!3m2!1sen!2sin!4v1725226991432!5m2!1sen!2sin" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+
+    <div class="search-container">
+        <div class="logo" onclick="window.location.href='home.html'">🏠</div>
+        <input type="text" class="search-bar" placeholder="Search doctors...">
+        <div class="logo" onclick="window.location.href='reg.html'">📝</div>
+        <div class="logo" onclick="window.location.href='login.html'">🔑</div>
+    </div>
+
+    <div class="catalog">
+        <div class="doctor-card">
+            <h3>Dr. John Doe</h3>
+            <p>Degree: MBBS, MD</p>
+            <p>Fees: $150</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: New York</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Jane Smith</h3>
+            <p>Degree: MBBS, DNB</p>
+            <p>Fees: $200</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐⭐</p>
+            <p class="location">Location: Los Angeles</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Emily Johnson</h3>
+            <p>Degree: MBBS, FRCS</p>
+            <p>Fees: $180</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: Chicago</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Michael Brown</h3>
+            <p>Degree: MBBS, MRCP</p>
+            <p>Fees: $170</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: Houston</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Sarah Lee</h3>
+            <p>Degree: MBBS, PhD</p>
+            <p>Fees: $220</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐⭐</p>
+            <p class="location">Location: Phoenix</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. David Wilson</h3>
+            <p>Degree: MBBS, MCh</p>
+            <p>Fees: $160</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐⭐</p>
+            <p class="location">Location: Philadelphia</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Lisa Martinez</h3>
+            <p>Degree: MBBS, MD</p>
+            <p>Fees: $190</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: San Antonio</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. James Anderson</h3>
+            <p>Degree: MBBS, DGO</p>
+            <p>Fees: $210</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: San Diego</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Patricia Taylor</h3>
+            <p>Degree: MBBS, FRCP</p>
+            <p>Fees: $200</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐⭐</p>
+            <p class="location">Location: Dallas</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Robert Moore</h3>
+            <p>Degree: MBBS, FACS</p>
+            <p>Fees: $230</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐⭐</p>
+            <p class="location">Location: San Jose</p>
+        </div>
+        <div class="doctor-card">
+            <h3>Dr. Angela Taylor</h3>
+            <p>Degree: MBBS, MD</p>
+            <p>Fees: $210</p>
+            <p class="rating">Rating: ⭐⭐⭐⭐</p>
+            <p class="location">Location: Austin</p>
+        </div>
+    </div>
+
+    <!-- Catalog Section -->
+    <div class="catalog-container">
+        <div class="catalog-item">
+            <a href="progress.html">
+                <img src="catalog-logo1.jpg" alt="Catalog 1 Logo">
+                <div class="catalog-content">Progress Report</div>
+            </a>
+        </div>
+        <div class="catalog-item">
+            <a href="therapy_plan_generator.html">
+                <img src="catalog-logo2.jpg" alt="Catalog 2 Logo">
+                <div class="catalog-content">AI Therapy Plan</div>
+            </a>
+        </div>
+        <div class="catalog-item">
+            <a href="virtual_session.html">
+                <img src="catalog-logo3.jpeg" alt="Catalog 3 Logo">
+                <div class="catalog-content">Virtual Therapy Session</div>
+            </a>
+        </div>
+        <div class="catalog-item">
+            <a href="#">
+                <img src="catalog-logo4.jpg" alt="Catalog 4 Logo">
+                <div class="catalog-content">Voice Recognition BOT</div>
+            </a>
+        </div>
+        <div class="catalog-item">
+            <a href="feedback_form_patient.html">
+                <img src="catalog-logo5.png" alt="Catalog 5 Logo">
+                <div class="catalog-content">Feedback Form</div>
+            </a>
+        </div>
+        <div class="catalog-item">
+            <a href="all_game.html">
+                <img src="catalog-logo6.jpeg" alt="Catalog 6 Logo">
+                <div class="catalog-content">Games - KIDS Section</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: contact@speechtherapy.com</p>
+                <p>Phone: +000 0000 0000</p>
+                <p>Address: 123 Therapy Lane, Wellness City, TX</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+                    <a href="#"><img src="twitter-icon.jpeg" alt="Twitter"></a>
+                    <a href="#"><img src="linkedin-icon.jpeg" alt="LinkedIn"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Speech Therapy Clinic | All Rights Reserved</p>
+        </div>
+    </footer>
+</body>
+</html>

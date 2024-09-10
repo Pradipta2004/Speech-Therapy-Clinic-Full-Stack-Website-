@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy Diagnosis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s;
+            background-color: #fff;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+        }
+        .selection-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .selection-container select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+        .question-group {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 255, 0.2); /* Blue shadow */
+        }
+        .question-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .question-group input[type="checkbox"],
+        .question-group input[type="radio"] {
+            margin-right: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 255, 0.3); /* Blue shadow for checkboxes */
+        }
+        .question-group .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .question-group .options label {
+            display: flex;
+            align-items: center;
+        }
+        .question-group .options input {
+            margin-right: 5px;
+        }
+        .text-area {
+            margin-bottom: 20px;
+        }
+        .text-area label {
+            display: block;
+            font-weight: bold;
+        }
+        .text-area textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .submit-btn,
+        .return-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .submit-btn:hover,
+        .return-btn:hover {
+            background-color: #0056b3;
+        }
+        .loading-ring {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #007bff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .result-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .result-container.active {
+            display: block;
+        }
+        .bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .pie-chart {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+        }
+        .therapist-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 255, 0.2); /* Blue shadow for therapist cards */
+            padding: 15px;
+            margin: 10px;
+            background-color: #f9f9f9;
+            text-align: center;
+            width: 220px;
+            display: inline-block;
+            vertical-align: top;
+        }
+        .therapist-card h4 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+        .therapist-card p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .therapist-catalog {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .therapy-plan {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <div class="selection-container">
+            <label for="form-level">Select Form Level:</label>
+            <select id="form-level" onchange="changeLevel()">
+                <option value="0">Level 0</option>
+                <option value="1">Level 1</option>
+                <option value="2">Level 2</option>
+            </select>
+        </div>
+        <div class="form-container active" id="form-container">
+            <form id="diagnosis-form">
+                <div id="questions"></div>
+                <div class="text-area">
+                    <label for="issue">Describe your issue:</label>
+                    <textarea id="issue" rows="4" cols="50"></textarea>
+                </div>
+                <button type="button" class="submit-btn" onclick="submitForm()">Submit</button>
+            </form>
+        </div>
+        <div class="loading-ring" id="loading-ring"></div>
+        <div class="result-container" id="result-container">
+            <button class="return-btn" onclick="goBack()">Return to Form</button>
+            <h3>Diagnosis Results</h3>
+            <div id="bars"></div>
+            <div id="pie-chart" class="pie-chart"></div>
+            <div class="therapist-catalog" id="therapist-suggestion"></div>
+            
+            <button class="submit-btn"><a href="get_therapy plan_patient.html" class="submit-btn">Get Therapy Plan</a></button>
+
+            
+            <div id="therapy-plan" class="therapy-plan"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let level = 0; // Default level
+
+        const questionsData = {
+            0: [
+                { question: "Do you experience difficulty articulating certain sounds?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to maintain a conversation?", options: ["Yes", "No"] },
+                { question: "Do you have a stutter?", options: ["Yes", "No"] },
+                { question: "Do you experience discomfort while speaking?", options: ["Yes", "No"] },
+                { question: "Do you feel your speech is affected by anxiety?", options: ["Yes", "No"] }
+            ],
+            1: [
+                { question: "Do you have difficulty with pronunciation?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have trouble with fluency?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you experience speech delay?", options: ["Yes", "No"] },
+                { question: "Do you have trouble finding the right words?", options: ["Yes", "No"] },
+                { question: "Do you use fillers (e.g., um, uh) frequently?", options: ["Yes", "No"] },
+                { question: "Do you have difficulty with volume control?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have a hoarse or strained voice?", options: ["Yes", "No"] },
+                { question: "Do you experience vocal fatigue?", options: ["Yes", "No"] },
+                { question: "Do you feel your speech is inconsistent?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to speak clearly in stressful situations?", options: ["Yes", "No"] }
+            ],
+            2: [
+                { question: "Do you experience difficulty with articulation in multiple contexts?", options: ["Yes", "No"] },
+                { question: "Do you have issues with language comprehension?", options: ["Yes", "No"] },
+                { question: "Do you struggle with word retrieval during conversation?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have difficulty with speech rhythm?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you find it hard to express thoughts clearly?", options: ["Yes", "No"] },
+                { question: "Do you experience repetitive speech patterns?", options: ["Yes", "No"] },
+                { question: "Do you have trouble with sentence structure?", options: ["Yes", "No"] },
+                { question: "Do you experience difficulty with voice modulation?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have challenges with social communication skills?", options: ["Yes", "No"] },
+                { question: "Do you feel that your speech affects your daily life?", options: ["Yes", "No"] },
+                { question: "Do you have difficulty with speech clarity?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you experience strain or discomfort while speaking for long periods?", options: ["Yes", "No"] },
+                { question: "Do you have difficulty with understanding complex sentences?", options: ["Yes", "No"] },
+                { question: "Do you feel overwhelmed by conversational interactions?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to maintain appropriate speech rate?", options: ["Often", "Sometimes", "Rarely", "Never"] }
+            ]
+        };
+
+        const diseases = [
+            { name: "Articulation Disorder", color: "#ffcc99" },
+            { name: "Fluency Disorder", color: "#c2c2f0" },
+            { name: "Voice Disorder", color: "#ff9999" },
+            { name: "Language Disorder", color: "#99ff99" },
+            { name: "Pragmatic Disorder", color: "#ffccff" }
+        ];
+
+        const therapists = [
+            { name: "Dr. Emma White", location: "New York, NY", degree: "Ph.D. in Speech-Language Pathology", fees: "$150/hr", rating: "4.8/5" },
+            { name: "Ms. John Doe", location: "Los Angeles, CA", degree: "M.S. in Speech Therapy", fees: "$120/hr", rating: "4.5/5" },
+            { name: "Dr. Sarah Brown", location: "Chicago, IL", degree: "Ph.D. in Communication Sciences", fees: "$180/hr", rating: "4.9/5" },
+            { name: "Mr. Michael Smith", location: "Houston, TX", degree: "M.A. in Speech-Language Pathology", fees: "$140/hr", rating: "4.7/5" },
+            { name: "Dr. Laura Green", location: "Miami, FL", degree: "Ph.D. in Clinical Speech Therapy", fees: "$160/hr", rating: "4.6/5" },
+            { name: "Ms. Ava Johnson", location: "San Francisco, CA", degree: "M.A. in Speech-Language Pathology", fees: "$130/hr", rating: "4.4/5" },
+            { name: "Dr. Robert King", location: "Philadelphia, PA", degree: "Ph.D. in Speech Pathology", fees: "$170/hr", rating: "4.6/5" },
+            { name: "Ms. Olivia Martinez", location: "Seattle, WA", degree: "M.S. in Speech Therapy", fees: "$140/hr", rating: "4.3/5" },
+            { name: "Dr. William Lee", location: "Boston, MA", degree: "Ph.D. in Communication Disorders", fees: "$160/hr", rating: "4.7/5" },
+            { name: "Dr. Emily Taylor", location: "Denver, CO", degree: "Ph.D. in Clinical Speech Therapy", fees: "$155/hr", rating: "4.8/5" }
+        ];
+
+       const therapyPlans = [
+    "Goals: The primary objective of this therapy plan is to significantly improve the overall clarity and fluency of the patient’s speech. This includes addressing issues with articulation, pronunciation, and fluidity in speech patterns. The aim is to help patients communicate more effectively and confidently in various settings, from casual conversations to professional environments. Assessment: The therapy will start with a comprehensive speech analysis, including a diagnostic evaluation to identify specific articulation and phonological disorders. This involves recording and analyzing speech samples to pinpoint areas needing improvement. Activities and Exercises: Patients will engage in daily articulation drills, which focus on the correct pronunciation of specific sounds. Voice modulation techniques will be practiced to help with pitch control and vocal strength. Additionally, structured conversational practice sessions will be held to simulate real-life interactions and improve fluency. Materials and Resources: Patients will have access to specialized speech therapy apps designed to aid in pronunciation and articulation. Flashcards for articulation will be provided to reinforce correct sound production. Video tutorials demonstrating proper speech patterns will be available for visual learning. Progress Monitoring: Weekly reviews will assess improvements in speech fluency and clarity. Adjustments to the exercises will be made based on the patient’s progress, ensuring that the therapy remains effective and tailored to individual needs.",
+
+    "Goals: The goal of this therapy plan is to reduce stuttering and enhance the rhythm of the patient’s speech. This includes minimizing the frequency and severity of stuttering episodes while improving the overall flow and rhythm of speech. Assessment: A thorough assessment will be conducted to evaluate the frequency and severity of stuttering. This includes observing the patient during various speaking tasks to identify patterns and triggers of stuttering. Activities and Exercises: The therapy will incorporate rhythmic speech training to help patients develop a smoother speech pattern. Breathing exercises will be introduced to manage anxiety and improve control over speech production. Cognitive-behavioral techniques will be employed to address the psychological aspects of stuttering. Materials and Resources: Patients will use metronome apps to practice speech rhythm and timing. Guided meditation resources will be provided to help manage anxiety. Online platforms will offer breathing exercises and relaxation techniques. Progress Monitoring: Progress will be monitored bi-weekly, focusing on reductions in stuttering episodes and improvements in speech rhythm. The therapy plan will be adjusted based on these evaluations to enhance effectiveness.",
+
+    "Goals: This therapy plan is designed to enhance vocal strength and pitch control. The primary focus is on developing a strong and versatile vocal range, improving pitch accuracy, and mastering vocal techniques. Assessment: The initial voice assessment will measure vocal range, strength, and pitch accuracy. This includes vocal exercises and tests to determine the patient’s current vocal capabilities and areas needing improvement. Activities and Exercises: Daily vocal exercises will be conducted to build vocal strength and flexibility. Pitch variation drills will help improve control over pitch changes. Resonance training will be included to enhance the quality and richness of the voice. Materials and Resources: Access to voice modulation apps will be provided for practice and self-assessment. Audio recordings for tracking progress and specialized training videos will be available for detailed guidance. Progress Monitoring: Weekly progress tracking will involve reviewing recorded vocal samples and conducting pitch accuracy tests. Feedback will be provided to refine techniques and address any challenges encountered.",
+
+    "Goals: The aim of this therapy plan is to improve social communication skills and pragmatic language use. This includes enhancing the patient’s ability to engage in meaningful social interactions and use language appropriately in various contexts. Assessment: The assessment will focus on social interaction patterns, including eye contact and conversational skills. Observations and evaluations will be conducted to identify areas where social communication can be improved. Activities and Exercises: The plan includes role-playing exercises to simulate real-life social scenarios. Social scenario simulations will help patients practice appropriate responses and interactions. Group therapy sessions will provide opportunities for social practice and feedback. Materials and Resources: Patients will receive social scripts to guide interactions and communication apps to facilitate practice. Online role-playing scenarios will offer additional opportunities to develop social skills. Progress Monitoring: Monthly assessments will review improvements in social interactions and pragmatic language use. Ongoing adjustments to the exercises will be made based on these evaluations to ensure continued progress.",
+
+    "Goals: To address specific issues related to speech sound production and improve overall articulation. This plan aims to correct errors in speech sound production and enhance clarity. Assessment: The therapy will begin with an initial articulation test to identify specific sounds and patterns that require correction. Detailed phonological assessments will pinpoint error patterns and guide the therapy process. Activities and Exercises: Daily phonetic drills will focus on practicing correct speech sounds. Speech sound discrimination tasks will help patients recognize and differentiate between sounds. Tongue placement exercises will be included to address articulation challenges. Materials and Resources: Articulation flashcards will be used to practice specific sounds. Sound discrimination apps will aid in identifying and correcting errors. Video tutorials will demonstrate correct tongue placement techniques. Progress Monitoring: Bi-weekly progress checks will evaluate improvements in articulation. Feedback will be provided to address any remaining issues and enhance outcomes.",
+
+    "Goals: The primary objective of this plan is to enhance speech fluency and reduce speech-related anxiety. This includes improving smoothness of speech and managing any anxiety that may affect communication. Assessment: Detailed assessments will be conducted to analyze speech fluency and identify psychological factors contributing to speech anxiety. Activities and Exercises: The plan will integrate relaxation techniques to help manage anxiety. Fluency shaping exercises will be practiced to improve speech smoothness. Desensitization activities will be included to reduce fear of speaking situations. Materials and Resources: Patients will have access to relaxation and mindfulness apps to support anxiety management. Fluency shaping software will aid in practicing smooth speech patterns. Guided desensitization exercises will help patients gradually face speaking challenges. Progress Monitoring: Monthly reviews will assess reductions in speech-related anxiety and improvements in fluency. The therapy plan will be adjusted as necessary to ensure continued progress.",
+
+    "Goals: This therapy plan focuses on improving language comprehension and expressive language skills. The objective is to enhance both understanding and expression of language in various contexts. Assessment: A comprehensive language assessment will identify areas of weakness in both comprehension and expression. This will involve evaluating the patient’s ability to understand and produce language effectively. Activities and Exercises: Daily language exercises will be conducted to practice understanding and producing language. Storytelling activities will be included to enhance narrative skills. Sentence construction tasks will help improve grammatical accuracy. Materials and Resources: Patients will have access to language learning apps to support daily practice. Storytelling resources will provide prompts and examples for practice. Interactive sentence-building games will offer engaging ways to practice language skills. Progress Monitoring: Weekly assessments will monitor improvements in language comprehension and expression. Progress will be tracked through interactive tests and feedback sessions to ensure effective learning.",
+
+    "Goals: To enhance speech rhythm and fluency through structured and consistent practice. The focus is on improving the natural flow and timing of speech. Assessment: Initial assessments will examine rhythm and fluency patterns in spontaneous speech. Observations will identify areas where rhythm and fluency can be improved. Activities and Exercises: Daily rhythmic speech drills will be practiced to improve timing and flow. Fluency shaping exercises will be included to enhance overall speech smoothness. Timed speaking activities will help develop natural rhythm in conversation. Materials and Resources: Rhythm training apps will be provided for practice and feedback. Audio feedback tools will be used to track improvements. Fluency practice software will offer structured exercises. Progress Monitoring: Progress will be evaluated bi-weekly through assessments of speech rhythm and fluency. Feedback will be given to refine techniques and address any issues encountered.",
+
+    "Goals: The objective of this therapy plan is to improve articulation and reduce errors in speech sound production. This plan focuses on correcting specific speech sound errors and enhancing clarity. Assessment: Detailed phonological assessments will be used to identify specific errors and patterns in speech. This includes evaluating the patient’s ability to produce accurate speech sounds. Activities and Exercises: Articulation drills will be practiced daily to target specific speech sounds. Minimal pair exercises will help patients distinguish between similar sounds. Targeted speech sound practice will be incorporated into daily routines. Materials and Resources: Phonological awareness apps will be used to support practice. Minimal pairs flashcards will provide targeted exercises. Articulation training videos will demonstrate correct sound production. Progress Monitoring: Weekly progress reviews will track improvements in speech sound accuracy. Adjustments to exercises will be made based on progress to ensure continued improvement.",
+
+    "Goals: To develop effective communication strategies and enhance overall speech intelligibility. This includes improving the ability to communicate clearly and effectively in various contexts. Assessment: Comprehensive assessments will evaluate communication effectiveness and speech intelligibility. This includes observing the patient’s ability to convey messages clearly and understand others. Activities and Exercises: Role-playing exercises will be used to practice communication strategies in different scenarios. Communication strategy training will help develop effective methods for conveying messages. Intelligibility drills will focus on improving clarity of speech. Materials and Resources: Communication strategy resources will provide guidance and practice materials. Intelligibility assessment tools will be used to evaluate progress. Role-playing apps will offer additional practice opportunities. Progress Monitoring: Monthly assessments will track improvements in communication effectiveness and speech intelligibility. Ongoing adjustments to strategies will be made based on these evaluations to ensure continued progress."
+];
+
+
+
+        function changeLevel() {
+            level = parseInt(document.getElementById('form-level').value);
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = '';
+            const questions = questionsData[level];
+            questions.forEach((q, index) => {
+                const group = document.createElement('div');
+                group.className = 'question-group';
+                const label = document.createElement('label');
+                label.innerHTML = `${index + 1}. ${q.question}`;
+                group.appendChild(label);
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options';
+
+                if (q.options) {
+                    q.options.forEach(option => {
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.id = `q${index}-${option}`;
+                        input.name = `q${index}`;
+                        input.value = option;
+                        const optionLabel = document.createElement('label');
+                        optionLabel.setAttribute('for', input.id);
+                        optionLabel.innerText = option;
+                        optionsContainer.appendChild(input);
+                        optionsContainer.appendChild(optionLabel);
+                    });
+                } else {
+                    const inputYes = document.createElement('input');
+                    inputYes.type = 'radio';
+                    inputYes.name = `q${index}`;
+                    inputYes.value = 'Yes';
+                    const yesLabel = document.createElement('label');
+                    yesLabel.setAttribute('for', `q${index}-Yes`);
+                    yesLabel.innerText = 'Yes';
+                    optionsContainer.appendChild(inputYes);
+                    optionsContainer.appendChild(yesLabel);
+
+                    const inputNo = document.createElement('input');
+                    inputNo.type = 'radio';
+                    inputNo.name = `q${index}`;
+                    inputNo.value = 'No';
+                    const noLabel = document.createElement('label');
+                    noLabel.setAttribute('for', `q${index}-No`);
+                    noLabel.innerText = 'No';
+                    optionsContainer.appendChild(inputNo);
+                    optionsContainer.appendChild(noLabel);
+                }
+                group.appendChild(optionsContainer);
+                questionsContainer.appendChild(group);
+            });
+        }
+
+        function submitForm() {
+            document.getElementById('form-container').classList.remove('active');
+            document.getElementById('loading-ring').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loading-ring').style.display = 'none';
+                document.getElementById('result-container').classList.add('active');
+                renderResults();
+            }, 2000);
+        }
+
+        function renderResults() {
+            const barsContainer = document.getElementById('bars');
+            const pieChartContainer = document.getElementById('pie-chart');
+            const therapistSuggestion = document.getElementById('therapist-suggestion');
+
+            barsContainer.innerHTML = '';
+            pieChartContainer.innerHTML = '';
+
+            let total = 100; // Assume total score is 100 for simplicity
+            let data = diseases.map(disease => {
+                return {
+                    ...disease,
+                    value: Math.floor(Math.random() * 100) // Random percentage for each disease
+                };
+            });
+
+            data.forEach(disease => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const fill = document.createElement('div');
+                fill.className = 'bar-fill';
+                fill.style.backgroundColor = disease.color;
+                fill.style.width = `${disease.value}%`;
+                bar.appendChild(fill);
+                const label = document.createElement('div');
+                label.innerHTML = `${disease.name}: ${disease.value}%`;
+                barsContainer.appendChild(bar);
+                barsContainer.appendChild(label);
+            });
+
+            const ctx = document.createElement('canvas');
+            pieChartContainer.appendChild(ctx);
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: data.map(d => d.color)
+                    }]
+                }
+            });
+
+            const suggestedTherapists = [];
+            while (suggestedTherapists.length < 4) {
+                const randomIndex = Math.floor(Math.random() * therapists.length);
+                if (!suggestedTherapists.includes(therapists[randomIndex])) {
+                    suggestedTherapists.push(therapists[randomIndex]);
+                }
+            }
+
+            therapistSuggestion.innerHTML = '';
+            suggestedTherapists.forEach(therapist => {
+                const card = document.createElement('div');
+                card.className = 'therapist-card';
+                card.innerHTML = `
+                    <h4>${therapist.name}</h4>
+                    <p><strong>Location:</strong> ${therapist.location}</p>
+                    <p><strong>Degree:</strong> ${therapist.degree}</p>
+                    <p><strong>Fees:</strong> ${therapist.fees}</p>
+                    <p><strong>Rating:</strong> ${therapist.rating}</p>
+                `;
+                therapistSuggestion.appendChild(card);
+            });
+        }
+
+        function goBack() {
+            document.getElementById('result-container').classList.remove('active');
+            document.getElementById('form-container').classList.add('active');
+        }
+
+        function getTherapyPlan() {
+            const plan = therapyPlans[Math.floor(Math.random() * therapyPlans.length)];
+            document.getElementById('therapy-plan').innerHTML = `<h3>Suggested Therapy Plan:</h3><p>${plan}</p>`;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestions(); // Render default questions
+        });
+    </script>
+</body>
+</html>

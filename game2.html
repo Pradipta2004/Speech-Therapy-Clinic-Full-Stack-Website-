@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Pronunciation Game</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('https://previews.123rf.com/images/tom934/tom9341702/tom934170200022/70686043-the-word-game-on-the-sky-background.jpg') no-repeat center center fixed, linear-gradient(135deg, #2b5876, #4e4376);
+            background-size: cover;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            transform: translateY(-50px);
+            animation: slideIn 1s ease forwards;
+            width: 400px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .level {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+            background-color: #ffeb3b;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 
+                         -1px -1px 0px #fff, 
+                         1px 1px 1px #888;
+            transform: perspective(500px) rotateX(10deg);
+        }
+
+        .target-word {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #007bff;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .words {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #007bff;
+            background-color: #f0f0f0;
+            overflow-y: auto;
+            font-size: 22px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .result {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #333;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .correct {
+            color: #28a745;
+        }
+
+        .incorrect {
+            color: #dc3545;
+        }
+
+        .score {
+            font-size: 22px;
+            margin-top: 20px;
+            color: #0004ff;
+        }
+
+        .level-complete {
+            font-size: 26px;
+            margin-top: 20px;
+            color: #ffdf00;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700, 0 0 40px #ffd700;
+            }
+            to {
+                text-shadow: 0 0 20px #ffae00, 0 0 30px #ffae00, 0 0 40px #ffae00, 0 0 50px #ffae00;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="level" id="levelDisplay">Level: Medium</div>
+        <div class="target-word" id="targetWord">Press Start to Get a Word</div>
+        <div class="words" id="transcriptDisplay"></div>
+        <button id="toggleButton">Start Recognition</button>
+        <div class="result" id="result"></div>
+        <div class="score" id="scoreDisplay">Score: 0</div>
+        <div class="level-complete" id="levelComplete" style="display:none;">Level Complete!</div>
+    </div>
+
+    <script>
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+
+        const easyWords = ["Cat", "Dog", "Sun", "Ball", "Fish", "Tree", "Book", "Cup", "Hat", "Milk"];
+        const moderateWords = ["banana", "guitar", "yellow", "purple", "window", "flower", "puzzle", "castle"];
+        const hardWords = ["hippopotamus", "rhinoceros", "encyclopedia", "parallelogram", "thermometer", "psychology"];
+
+        let currentLevel = "Easy";
+        let currentWord = "";
+        let recognizing = false;
+        let score = 0;
+        const maxLevelScore = 100;
+
+        const levelDisplay = document.getElementById('levelDisplay');
+        const targetWordElement = document.getElementById('targetWord');
+        const transcriptDisplay = document.getElementById('transcriptDisplay');
+        const resultDisplay = document.getElementById('result');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const toggleButton = document.getElementById('toggleButton');
+        const levelCompleteDisplay = document.getElementById('levelComplete');
+
+        function startGame() {
+            if (score >= maxLevelScore) {
+                advanceLevel();
+            } else {
+                levelCompleteDisplay.style.display = "none";
+            }
+
+            currentWord = getRandomWord();
+            targetWordElement.textContent = "Say this word: " + currentWord;
+            transcriptDisplay.textContent = "";
+            resultDisplay.textContent = "";
+        }
+
+        function advanceLevel() {
+            if (currentLevel === "Easy") {
+                currentLevel = "Moderate";
+            } else if (currentLevel === "Moderate") {
+                currentLevel = "Hard";
+            } else {
+                currentLevel = "Game Over!";
+                toggleButton.disabled = true;
+            }
+
+            levelDisplay.textContent = "Level: " + currentLevel;
+            levelCompleteDisplay.style.display = "block";
+            score = 0;
+            scoreDisplay.textContent = "Score: " + score;
+        }
+
+        function getRandomWord() {
+            if (currentLevel === "Easy") {
+                return easyWords[Math.floor(Math.random() * easyWords.length)];
+            } else if (currentLevel === "Moderate") {
+                return moderateWords[Math.floor(Math.random() * moderateWords.length)];
+            } else if (currentLevel === "Hard") {
+                return hardWords[Math.floor(Math.random() * hardWords.length)];
+            }
+        }
+
+        recognition.addEventListener('result', e => {
+            const transcript = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('')
+                .trim();
+
+            transcriptDisplay.textContent = transcript;
+
+            if (e.results[0].isFinal) {
+                if (transcript.toLowerCase() === currentWord.toLowerCase()) {
+                    score += 10;
+                    resultDisplay.textContent = "Correct!";
+                    resultDisplay.classList.remove("incorrect");
+                    resultDisplay.classList.add("correct");
+                } else {
+                    score -= 5;
+                    resultDisplay.textContent = "Incorrect!";
+                    resultDisplay.classList.remove("correct");
+                    resultDisplay.classList.add("incorrect");
+                }
+
+                scoreDisplay.textContent = "Score: " + score;
+                startGame();
+            }
+        });
+
+        recognition.addEventListener('end', () => {
+            if (recognizing) recognition.start();
+        });
+
+        toggleButton.addEventListener('click', () => {
+            if (recognizing) {
+                recognition.stop();
+                toggleButton.textContent = 'Start Recognition';
+            } else {
+                startGame();
+                recognition.start();
+                toggleButton.textContent = 'Stop Recognition';
+            }
+            recognizing = !recognizing;
+        });
+    </script>
+</body>
+
+</html>

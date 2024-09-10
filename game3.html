@@ -1,0 +1,195 @@
+xswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwsszzzzxx<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoneme Adventure</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('https://as1.ftcdn.net/v2/jpg/02/86/90/46/1000_F_286904692_o3Oii6GEOs4uzQNJYRfG5UyOF17A42Li.jpg'), linear-gradient(135deg, #4b79a1, #283e51);
+            overflow: hidden;
+            color: #333;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            transform: perspective(1000px) rotateX(10deg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .container:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.6);
+        }
+
+        .target-word, .result {
+            margin: 20px 0;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            background: linear-gradient(145deg, #e0eafc, #cfdef3);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 20px;
+            cursor: pointer;
+            background: linear-gradient(145deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .level-complete {
+            font-size: 26px;
+            margin-top: 20px;
+            color: #ffdf00;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        .level {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold; /* Makes the text bold */
+    background-color: #ffeb3b; /* Highlight with a yellow background */
+    padding: 10px; /* Adds some padding to the background */
+    border-radius: 8px; /* Rounds the corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adds a slight shadow for emphasis */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 
+                 -1px -1px 0px #fff, 
+                 1px 1px 1px #888; /* Creates the 3D effect with shadows */
+    transform: perspective(500px) rotateX(10deg); /* Adds a perspective tilt */
+}
+        button:hover {
+            background: linear-gradient(145deg, #357abd, #2c5d94);
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .images img {
+            width: 110px;
+            height: 110px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .images img:hover {
+            transform: scale(1.2) translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="level" id="levelDisplay">Level: Hard</div>
+        <div class="target-word" id="targetWord">Press Start to Get a Word</div>
+        <button id="toggleButton">Start Recognition</button>
+        <div class="result" id="result"></div>
+        <div class="images">
+            <img src="https://via.placeholder.com/100" alt="Image 1">
+            <img src="https://via.placeholder.com/100" alt="Image 2">
+            <img src="https://via.placeholder.com/100" alt="Image 3">
+        </div>
+    </div>
+
+    <script>
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+
+        const easyWords = ["Cat.", "Dog.", "Sun.", "Ball.", "Fish.", "Tree.", "Book.", "Cup.", "Hat.", "Milk."];
+        const moderateWords = ["Banana.", "Guitar.", "Yellow.", "Purple.", "Window.", "Flower.", "Puzzle.", "Castle.", "Pencil.", "Rocket."];
+        const hardWords = ["Hippopotamus.", "Rhinoceros.", "Encyclopedia.", "Parallelogram.", "Thermometer.", "Psychology."];
+
+        let currentWord = "";
+        let recognizing = false;
+
+        const levelDisplay = document.getElementById('levelDisplay');
+        const targetWordElement = document.getElementById('targetWord');
+        const resultDisplay = document.getElementById('result');
+        const toggleButton = document.getElementById('toggleButton');
+
+        function getRandomWord(level) {
+            let words;
+            if (level === "Easy") words = easyWords;
+            else if (level === "Moderate") words = moderateWords;
+            else words = hardWords;
+            return words[Math.floor(Math.random() * words.length)];
+        }
+
+        function startGame() {
+            currentWord = getRandomWord("Easy");
+            targetWordElement.textContent = currentWord;
+            resultDisplay.textContent = "";
+        }
+
+        function checkPronunciation(transcript) {
+            if (transcript.toLowerCase().trim() === currentWord.toLowerCase().trim()) {
+                resultDisplay.textContent = "Correct!";
+                resultDisplay.style.color = "#00ff00";
+            } else {
+                resultDisplay.textContent = "Incorrect!";
+                resultDisplay.style.color = "#ff0000";
+            }
+        }
+
+        recognition.addEventListener('result', e => {
+            const transcript = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+            if (e.results[0].isFinal) {
+                checkPronunciation(transcript);
+            }
+        });
+
+        recognition.addEventListener('end', () => {
+            if (recognizing) recognition.start();
+        });
+
+        toggleButton.addEventListener('click', () => {
+            if (recognizing) {
+                recognition.stop();
+                toggleButton.textContent = 'Start Recognition';
+            } else {
+                startGame();
+                recognition.start();
+                toggleButton.textContent = 'Stop Recognition';
+            }
+            recognizing = !recognizing;
+        });
+
+        // Initialize the game
+        startGame();
+    </script>
+</body>
+</html>

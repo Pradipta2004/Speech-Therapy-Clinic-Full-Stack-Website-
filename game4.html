@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Recognition Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #87ceeb, #f0e68c);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #gameArea {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .word {
+            position: absolute;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 2px 2px 8px #000;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                top: 100%;
+            }
+        }
+
+        #retryButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #retryButton:hover {
+            background-color: #0056b3;
+        }
+
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 1px 1px 5px #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="gameArea"></div>
+    <div class="level" id="levelDisplay">Level: Advance</div>
+    <button id="retryButton">Retry</button>
+    <div id="score">Score: 0</div>
+
+    <script>
+        const words = ["Cat.", "Dog.", "Sun.", "Ball.", "Fish.", "Tree.", "Book.", "Cup.", "Hat.", "Milk.", "Star.", "Pen.", "Box.", "Cake.", "Jump.", "Run.", "Snow.", "Car.", "Rain.", "Moon.", "Kite.", "Shoe.", "Key.", "Bell.", "Bear.", "Doll.", "Duck.", "Leaf.", "Cloud.", "Flag.", "Boat.", "Drum.", "Balloon.", "Glove.", "Sock.", "Clock.", "Plane.", "Apple.", "Bread.", "Egg."];
+        let score = 0;
+        let currentWord = "";
+        let recognizing = false;
+
+        function getRandomWord() {
+            return words[Math.floor(Math.random() * words.length)];
+        }
+
+        function spawnWord() {
+            currentWord = getRandomWord();
+            const wordElement = document.createElement('div');
+            wordElement.textContent = currentWord;
+            wordElement.className = 'word';
+            wordElement.style.left = Math.random() * 80 + 'vw';
+            wordElement.style.animationDuration = 5 - (score * 0.05) + 's'; // Speed increases with score
+            wordElement.style.top = 0;
+            document.getElementById('gameArea').appendChild(wordElement);
+
+            wordElement.addEventListener('animationend', function () {
+                gameOver();
+            });
+        }
+
+        function checkPronunciation(transcript) {
+            transcript = transcript.toLowerCase().trim();
+            if (transcript === currentWord.toLowerCase()) {
+                destroyWord();
+            }
+        }
+
+        function destroyWord() {
+            const wordElement = document.querySelector('.word');
+            if (wordElement) {
+                wordElement.remove();
+                score += 1;
+                document.getElementById('score').textContent = `Score: ${score}`;
+                spawnWord();
+            }
+        }
+
+        function gameOver() {
+            recognizing = false;
+            recognition.stop();
+            document.getElementById('retryButton').style.display = 'block';
+            document.getElementById('gameArea').innerHTML = '';
+            alert('Game Over! Your score is ' + score);
+        }
+
+        function startGame() {
+            score = 0;
+            document.getElementById('score').textContent = `Score: ${score}`;
+            document.getElementById('retryButton').style.display = 'none';
+            spawnWord();
+            recognizing = true;
+            recognition.start();
+        }
+
+        const retryButton = document.getElementById('retryButton');
+        retryButton.addEventListener('click', startGame);
+
+        // Speech Recognition Setup
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = false;
+
+        recognition.addEventListener('result', e => {
+            const transcript = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+            checkPronunciation(transcript);
+        });
+
+        recognition.addEventListener('end', () => {
+            if (recognizing) recognition.start();
+        });
+
+        startGame();
+    </script>
+</body>
+
+</html>

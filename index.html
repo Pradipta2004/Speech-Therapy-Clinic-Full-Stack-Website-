@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Speech Therapy</title>
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <!-- <link rel="stylesheet" href="static/css/index_css.css" /> -->
+
+    <nav class="section__container nav__container gradient-custom1">
+        <div class="nav__logo"><a href="/">Speech<span>Therapy</a></span></div>
+        <ul class="nav__links">
+         <li class="link"><a href="/#home">Home</a></li>
+          <li class="link"><a href="/#about">About Us</a></li>
+          <li class="link"><a href="/#service">Services</a></li>
+          <li class="link"><a href="/#pages">Therapists</a></li>
+          <li class="link"><a href="/#contact_us">Contact us</a></li>
+        </ul>
+        <div class="search_login">
+        <form class="d-flex nav-search-form" role="search">
+              <input class="search-box" type="search" placeholder="Search" aria-label="Search">
+              <!-- <button class="btn btn-outline-success" type="submit">Search</button> -->
+              <button class="search-btn" type="button"><i class="ph-bold ph-magnifying-glass"></i></button>
+              <button class="close-btn" type="button"><i class="ph-bold ph-x"></i></button>
+        </form>
+        <!-- <button class="notification_bell" type="button"><i class="ph ph-bell"></i></button> -->
+        <button class="notification_bell" type="button"><i class='bx bx-bell'></i></button>
+        <!-- {% if session.get('email') %}
+          <a href="/profile"><button type="button" class="btn">Profile</button></a>
+          <a href="/logout"><button type="button" class="btn">Log out</button></a>
+        {% else %} -->
+          <a href="reg.html"><button type="button" class="btn">Sign Up</button></a>
+          <a href="login.html"><button type="button" class="btn">Log in</button></a>
+        <!-- {% endif %} -->
+      </div>
+      </nav>
+    
+    <nav class="sidebar">
+      <div class="logo_menu">
+        <h2 class="sidebar_logo">Menu</h2>
+        <i class='bx bx-menu toggle_btn'></i>
+      </div>
+      <ul class="list">
+        <li class="list_item active_sidebar_element">
+          <a href="/">
+            <i class='bx bx-home' ></i>
+            <span class="link_name" style="--i:1;">Home</span>
+          </a>
+        </li>
+        <li class="list_item">
+          <a href="login.html">
+            <i class='bx bx-grid-alt' ></i>
+            <span class="link_name" style="--i:2;">Dashboard</span>
+          </a>
+        </li>
+        <li class="list_item">
+          <a href="login.html">
+            <i class='bx bxs-watch' ></i>
+            <span class="link_name" style="--i:3;">Appointments</span>
+          </a>
+        </li>
+        <li class="list_item">
+          <a href="login.html">
+            <i class='bx bx-laptop' ></i>
+            <span class="link_name" style="--i:4;">Online Therapy</span>
+          </a>
+        </li>
+        <li class="list_item">
+          <a href="login.html">
+            <i class='bx bx-bell' ></i>
+            <span class="link_name" style="--i:5;">Notifications</span>
+          </a>
+        </li>
+        <li class="list_item">
+          <a href="login.html">
+            <i class='bx bx-cog' ></i>
+            <span class="link_name" style="--i:6;">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+
+    
+  </head>
+
+<!-- style="background-color: #DFF2F1;" -->
+  <body>
+    <!-- page load animation -->
+<div class="wrapper" id="preloader">
+    <div class="box-wrap">
+        <div class="box one"></div>
+        <div class="box two"></div>
+        <div class="box three"></div>
+        <div class="box four"></div>
+        <div class="box five"></div>
+        <div class="box six"></div>
+    </div>
+</div>
+
+
+    <header class="hidden">
+      <div class="section__container header__container" id="home">
+        <div class="header__content header__content_bg">
+          <h1 style="color: black;">Providing an Exceptional Patient Experience</h1>
+          <p style="color: black;">
+            Welcome, where exceptional patient experiences are our priority.
+            With compassionate care, state-of-the-art facilities, and a
+            patient-centered approach, we're dedicated to your well-being. Trust
+            us with your health and experience the difference.
+          </p>
+          <button class="btn">See Services</button>
+        </div>
+      </div>
+      <div class="scroll-down-arrow-container">
+        <span class="scroll-down-arrow"></span>
+        <span class="scroll-down-arrow"></span>
+      </div>
+    </header>
+
+    <section class="section__container service__container" id="service">
+      <div class="service__header hidden1">
+        <div class="service-header-image">
+           <img src="assests/images/about.jpg"> 
+        </div>
+        <div class="service__header__content">
+          <h2 class="section__header" style="color: blue;">Our Special service</h2>
+          <p><strong>
+            Beyond simply providing medical care, our commitment lies in
+            delivering unparalleled service tailored to your unique needs.</strong>
+          </p>
+            <button class="service__btn">Ask A Service</button>
+
+        </div>
+        <!-- <button class="service__btn">Ask A Service</button> -->
+      </div>
+      <div class="service__grid">
+        <div class="service__card logo hidden">
+          <span><i class="ri-microscope-line"></i></span>
+          <h4>Laboratory Test</h4>
+          <p>
+            Accurate Diagnostics, Swift Results: Experience top-notch Laboratory
+            Testing at our facility.
+          </p>
+          <a href="#">Learn More</a>
+        </div>
+        <div class="service__card logo hidden">
+          <span><i class="ri-mental-health-line"></i></span>
+          <h4>Health Check</h4>
+          <p>
+            Our thorough assessments and expert evaluations help you stay
+            proactive about your health.
+          </p>
+          <a href="#">Learn More</a>
+        </div>
+        <div class="service__card logo hidden">
+          <span><i class="ri-hospital-line"></i></span>
+          <h4>General Dentistry</h4>
+          <p>
+            Experience comprehensive oral care with Dentistry. Trust us to keep
+            your smile healthy and bright.
+          </p>
+          <a href="#">Learn More</a>
+        </div>
+      </div>
+    </section>
+    <section class="section__container about__container" id="about">
+      <div class="about__content card logo hidden">
+        <h2 class="section__header">About Us</h2>
+        <p>
+          Welcome to our healthcare website, your one-stop destination for
+          reliable and comprehensive health care information. We are committed
+          to promoting wellness and providing valuable resources to empower you
+          on your health journey.
+        </p>
+        <p>
+          Explore our extensive collection of expertly written articles and
+          guides covering a wide range of health topics. From understanding
+          common medical conditions to tips for maintaining a healthy lifestyle,
+          our content is designed to educate, inspire, and support you in making
+          informed choices for your health.
+        </p>
+        <p>
+          Discover practical health tips and lifestyle advice to optimize your
+          physical and mental well-being. We believe that small changes can lead
+          to significant improvements in your quality of life, and we're here to
+          guide you on your path to a healthier and happier you.
+        </p>
+      </div>
+      <div class="about__image logo hidden">
+        <img src="assests/images/about.jpg" alt="about" />
+      </div>
+    </section>
+
+    <section class="section__container why__container" id="blog">
+      <div class="why__image logo hidden1">
+        <img src="assests/images/choose-us.jpg" alt="why choose us" />
+      </div>
+      <div class="why__content logo hidden1">
+        <h2 class="section__header">Why Choose Us</h2>
+        <p>
+          With a steadfast commitment to your well-being, our team of highly
+          trained healthcare professionals ensures that you receive nothing
+          short of exceptional patient experiences.
+        </p>
+        <div class="why__grid">
+          <span><i class="ri-hand-heart-line"></i></span>
+          <div>
+            <h4>Intensive Care</h4>
+            <p>
+              Our Intensive Care Unit is equipped with advanced technology and
+              staffed by team of professionals
+            </p>
+          </div>
+          <span><i class="ri-truck-line"></i></span>
+          <div>
+            <h4>Free Ambulance Car</h4>
+            <p>
+              A compassionate initiative to prioritize your health and
+              well-being without any financial burden.
+            </p>
+          </div>
+          <span><i class="ri-hospital-line"></i></span>
+          <div>
+            <h4>Medical and Surgical</h4>
+            <p>
+              Our Medical and Surgical services offer advanced healthcare
+              solutions to address medical needs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container doctors__container" id="pages">
+      <div class="doctors__header">
+        <div class="doctors__header__content">
+          <h2 class="section__header">Our Special Doctors</h2>
+          <p>
+            We take pride in our exceptional team of doctors, each a specialist
+            in their respective fields.
+          </p>
+        </div>
+        <div class="doctors__nav">
+          <span><i class="ri-arrow-left-line"></i></span>
+          <span><i class="ri-arrow-right-line"></i></span>
+        </div>
+      </div>
+      <div class="doctors__grid">
+        <div class="doctors__card logo hidden1">
+          <div class="doctors__card__image">
+            <img src="assests/images/doctor-1.jpg" alt="doctor" />
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr. Emily Smith</h4>
+          <p>Cardiologist</p>
+        </div>
+        <div class="doctors__card logo hidden1">
+          <div class="doctors__card__image">
+            <img src="assests/images/doctor-2.jpg" alt="doctor" />
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr. James Anderson</h4>
+          <p>Neurosurgeon</p>
+        </div>
+        <div class="doctors__card logo hidden1">
+          <div class="doctors__card__image">
+            <img src="assests/images/doctor-3.jpg" alt="doctor" />
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr. Michael Lee</h4>
+          <p>Dermatologist</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container contact_us__container", id="contact_us">
+        <div class="contact_us_heading">
+            <h2 class="section__header">Contact Us</h2>
+        </div>
+        <div class="contact_us_body">
+            <div class="contact_us_map hidden">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d557.6504719249178!2d88.396420676778!3d22.558410198438402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a02768400b479b1%3A0x5ad44b718c770205!2sRCC%20INSTITUTE%20OF%20INFORMATION%20TECHNOLOGY%20(New%20Campus)!5e0!3m2!1sen!2sin!4v1725386632269!5m2!1sen!2sin" width="1400" height="900" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="contact_us_form card hidden1">
+                <form class="contact_us_form_body">
+                    <h2>Send Message to us</h2>
+                    <input class="search-box1" type="text" placeholder="Name" aria-label="Name">
+                    <input class="search-box1" type="email" placeholder="Email" aria-label="Email">
+                    <input class="search-box1" type="text" placeholder="Message" aria-label="Message">
+                    <a href="/"><button type="submit" class="btn contact_us_btn">Send Message</button></a>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+      <div class="section__container footer__container hidden">
+        <div class="footer__col">
+          <h3>Health<span>Care</span></h3>
+          <p>
+            We are honored to be a part of your healthcare journey and committed
+            to delivering compassionate, personalized, and top-notch care every
+            step of the way.
+          </p>
+          <p>
+            Trust us with your health, and let us work together to achieve the
+            best possible outcomes for you and your loved ones.
+          </p>
+        </div>
+        <div class="footer__col">
+          <h4>About Us</h4>
+          <p>Home</p>
+          <p>About Us</p>
+          <p>Work With Us</p>
+          <p>Our Blog</p>
+          <p>Terms & Conditions</p>
+        </div>
+        <div class="footer__col">
+          <h4>Services</h4>
+          <p>Search Terms</p>
+          <p>Advance Search</p>
+          <p>Privacy Policy</p>
+          <p>Suppliers</p>
+          <p>Our Stores</p>
+        </div>
+        <div class="footer__col">
+          <h4>Contact Us</h4>
+          <p>
+            <i class="ri-map-pin-2-fill"></i> 123, London Bridge Street, London
+          </p>
+          <p><i class="ri-mail-fill"></i> srijandawn13@gmail.com</p>
+          <p><i class="ri-phone-fill"></i> (+91) 74393 17805</p>
+        </div>
+      </div>
+      <div class="footer__bar">
+        <div class="footer__bar__content">
+          <p>Copyright © 2023 Web Design Mastery. All rights reserved.</p>
+          <div class="footer__socials">
+            <span><i class="ri-instagram-line"></i></span>
+            <span><i class="ri-facebook-fill"></i></span>
+            <span><i class="ri-heart-fill"></i></span>
+            <span><i class="ri-twitter-fill"></i></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Modal HTML for pop up flash message -->
+        <!-- {% if get_flashed_messages() %}
+        <div id="flashModal" class="modal" style="display: block;">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('flashModal').style.display='none'">&times;</span>
+                {% for message in get_flashed_messages() %}
+                    <p class="flash_message">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %} -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assests/css/main.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script defer src="assests/js/main.js"></script>
+<script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+<script src="https://mediafiles.botpress.cloud/f97b401b-aec4-4ca8-8890-5ea3bd43a4ba/webchat/config.js" defer></script>
+<script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+<script src="https://mediafiles.botpress.cloud/f97b401b-aec4-4ca8-8890-5ea3bd43a4ba/webchat/config.js" defer></script>
+
+<!-- <script>
+    // preloader
+    var loader = document.getElementById("preloader");
+
+    window.addEventListener("load", function(){
+    loader.style.display = "none";
+    })
+
+</script> -->
+<!-- {% endblock body %} -->
+
+  </body>
+</html>

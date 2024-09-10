@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy Diagnosis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s;
+            background-color: #fff;
+            color: #000;
+            margin: 0;
+            padding: 0;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+        .question-group {
+            margin-bottom: 20px;
+        }
+        .question-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .question-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .text-area {
+            margin-bottom: 20px;
+        }
+        .submit-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        .loading-ring {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #007bff;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .result-container {
+            display: none;
+            margin-top: 20px;
+        }
+        .result-container.active {
+            display: block;
+        }
+        .bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .pie-chart {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+        }
+        .therapy-plan {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <div class="form-container active" id="form-container">
+            <form id="diagnosis-form">
+                <div id="questions"></div>
+                <div class="text-area">
+                    <label for="issue">Describe your issue:</label>
+                    <textarea id="issue" rows="4" cols="50"></textarea>
+                </div>
+                <button type="button" class="submit-btn" onclick="submitForm()">Submit</button>
+            </form>
+        </div>
+        <div class="loading-ring" id="loading-ring"></div>
+        <div class="result-container" id="result-container">
+            <h3>Diagnosis Results</h3>
+            <div id="bars"></div>
+            <div id="pie-chart" class="pie-chart"></div>
+            <div id="therapist-suggestion"></div>
+            <button class="submit-btn" onclick="getTherapyPlan()">Get Therapy Plan</button>
+            <div id="therapy-plan" class="therapy-plan"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let level = 0; // Change this to 0, 1, or 2 for different levels
+        const questionsData = {
+            0: [
+                { question: "Do you experience difficulty articulating certain sounds?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to maintain a conversation?", options: ["Yes", "No"] },
+                { question: "Do you have a stutter?", options: ["Yes", "No"] },
+                { question: "Do you experience discomfort while speaking?", options: ["Yes", "No"] },
+                { question: "Do you feel your speech is affected by anxiety?", options: ["Yes", "No"] },
+            ],
+            1: [
+                { question: "Do you have difficulty with pronunciation?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have trouble with fluency?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you experience speech delay?", options: ["Yes", "No"] },
+                { question: "Do you have trouble finding the right words?", options: ["Yes", "No"] },
+                { question: "Do you use fillers (e.g., um, uh) frequently?", options: ["Yes", "No"] },
+                { question: "Do you have difficulty with volume control?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you have a hoarse or strained voice?", options: ["Yes", "No"] },
+                { question: "Do you experience vocal fatigue?", options: ["Yes", "No"] },
+                { question: "Do you feel your speech is inconsistent?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to speak clearly in stressful situations?", options: ["Yes", "No"] },
+            ],
+            2: [
+                { question: "Do you experience difficulty with articulation in multiple contexts?", options: ["Yes", "No"] },
+                { question: "Do you have problems with sentence structure?", options: ["Yes", "No"] },
+                { question: "Do you have difficulty with complex verbal instructions?", options: ["Yes", "No"] },
+                { question: "Do you find it challenging to express abstract ideas?", options: ["Yes", "No"] },
+                { question: "Do you struggle with voice modulation?", options: ["Often", "Sometimes", "Rarely", "Never"] },
+                { question: "Do you experience rapid speech or pressure to speak quickly?", options: ["Yes", "No"] },
+                { question: "Do you have difficulties with speech sound discrimination?", options: ["Yes", "No"] },
+                { question: "Do you have issues with pragmatic aspects of communication?", options: ["Yes", "No"] },
+                { question: "Do you have trouble with speech rhythm or prosody?", options: ["Yes", "No"] },
+                { question: "Do you experience significant speech disfluencies?", options: ["Yes", "No"] },
+                { question: "Do you have difficulties in maintaining topic coherence?", options: ["Yes", "No"] },
+                { question: "Do you have issues with social communication skills?", options: ["Yes", "No"] },
+                { question: "Do you feel your speech impacts your social interactions?", options: ["Yes", "No"] },
+                { question: "Do you experience difficulties with sentence complexity?", options: ["Yes", "No"] },
+                { question: "Do you find it hard to adapt your speech to different audiences?", options: ["Yes", "No"] },
+            ]
+        };
+
+        const diseases = [
+            { name: "Speech Delay", color: "#ff9999" },
+            { name: "Stuttering", color: "#66b3ff" },
+            { name: "Voice Disorder", color: "#99ff99" },
+            { name: "Articulation Disorder", color: "#ffcc99" },
+            { name: "Fluency Disorder", color: "#c2c2f0" }
+        ];
+
+        const therapists = [
+            { name: "Dr. Jane Smith", location: "New York", degree: "PhD in Speech Therapy", fees: "$120/hr", rating: "4.8" },
+            { name: "Dr. John Doe", location: "Los Angeles", degree: "MSc in Speech Pathology", fees: "$100/hr", rating: "4.7" },
+            { name: "Dr. Emily Davis", location: "Chicago", degree: "MA in Communication Disorders", fees: "$110/hr", rating: "4.9" }
+        ];
+
+        const therapyPlans = [
+            "Daily articulation exercises and warm-ups.",
+            "Weekly fluency therapy sessions and speech practice.",
+            "Voice modulation exercises and relaxation techniques.",
+            "Pronunciation drills and stress management strategies.",
+            "Comprehensive speech therapy including video tutorials.",
+            "Intensive one-on-one therapy for complex disorders.",
+            "Group therapy sessions focused on social communication skills.",
+            "Interactive voice exercises with feedback and tracking.",
+            "Customized speech therapy plan with personal goals.",
+            "Advanced articulation and rhythm training.",
+            "Speech assessment followed by personalized exercises.",
+            "Voice therapy including breathing and vocal exercises.",
+            "Weekly therapy sessions combined with self-study materials.",
+            "Therapy plan with multimedia resources and practice drills.",
+            "Intensive fluency therapy with progress monitoring.",
+            "Personalized therapy with regular updates and feedback.",
+            "Speech enhancement plan with guided activities.",
+            "Comprehensive plan including daily practice and weekly reviews.",
+            "Speech therapy focusing on pragmatic skills and social interactions.",
+            "Customized plan with exercises for specific speech issues."
+        ];
+
+        function renderQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questionsContainer.innerHTML = '';
+            const questions = questionsData[level];
+            questions.forEach((q, index) => {
+                const group = document.createElement('div');
+                group.className = 'question-group';
+                const label = document.createElement('label');
+                label.innerHTML = `${index + 1}. ${q.question}`;
+                group.appendChild(label);
+                q.options.forEach(option => {
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = `q${index}-${option}`;
+                    input.name = `q${index}`;
+                    input.value = option;
+                    const optionLabel = document.createElement('label');
+                    optionLabel.setAttribute('for', input.id);
+                    optionLabel.innerText = option;
+                    group.appendChild(input);
+                    group.appendChild(optionLabel);
+                });
+                questionsContainer.appendChild(group);
+            });
+        }
+
+        function submitForm() {
+            document.getElementById('form-container').classList.remove('active');
+            document.getElementById('loading-ring').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loading-ring').style.display = 'none';
+                document.getElementById('result-container').classList.add('active');
+                renderResults();
+            }, 2000);
+        }
+
+        function renderResults() {
+            const barsContainer = document.getElementById('bars');
+            const pieChartContainer = document.getElementById('pie-chart');
+            const therapistSuggestion = document.getElementById('therapist-suggestion');
+
+            let total = 100; // Assume total score is 100 for simplicity
+            let data = diseases.map(disease => {
+                return {
+                    ...disease,
+                    value: Math.floor(Math.random() * 100) // Random percentage for each disease
+                };
+            });
+
+            data.forEach(disease => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                const fill = document.createElement('div');
+                fill.className = 'bar-fill';
+                fill.style.backgroundColor = disease.color;
+                fill.style.width = `${disease.value}%`;
+                bar.appendChild(fill);
+                const label = document.createElement('div');
+                label.innerHTML = `${disease.name}: ${disease.value}%`;
+                barsContainer.appendChild(bar);
+                barsContainer.appendChild(label);
+            });
+
+            const ctx = document.createElement('canvas');
+            pieChartContainer.appendChild(ctx);
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [{
+                        data: data.map(d => d.value),
+                        backgroundColor: data.map(d => d.color)
+                    }]
+                }
+            });
+
+            const suggestedTherapist = therapists[Math.floor(Math.random() * therapists.length)];
+            therapistSuggestion.innerHTML = `
+                <h4>Therapist Suggestion:</h4>
+                <p>Name: ${suggestedTherapist.name}</p>
+                <p>Location: ${suggestedTherapist.location}</p>
+                <p>Degree: ${suggestedTherapist.degree}</p>
+                <p>Fees: ${suggestedTherapist.fees}</p>
+                <p>Rating: ${suggestedTherapist.rating}</p>
+            `;
+        }
+
+        function getTherapyPlan() {
+            const plan = therapyPlans[Math.floor(Math.random() * therapyPlans.length)];
+            document.getElementById('therapy-plan').innerHTML = `
+                <h4>Recommended Therapy Plan:</h4>
+                <p>${plan}</p>
+            `;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        renderQuestions();
+    </script>
+</body>
+</html>

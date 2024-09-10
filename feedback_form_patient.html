@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapist Feedback Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .feedback-form-container {
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .feedback-form-container:hover {
+            transform: rotateY(1deg) rotateX(1deg);
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 1em;
+            margin: 15px 0 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            background-color: #eef2f5;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            background-color: #4285f4;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #357ae8;
+            transform: translateY(-3px);
+        }
+
+        .submit-btn:active {
+            background-color: #2a62b5;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Additional 3D Animation Effects */
+        .feedback-form-container::before,
+        .feedback-form-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: -1;
+        }
+
+        .feedback-form-container:hover::before,
+        .feedback-form-container:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="feedback-form-container">
+        <h2>Patient Feedback Form</h2>
+        <form action="submit_feedback.php" method="POST">
+            <label for="name">Patient Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+            <label for="email">Patient Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="therapist">Select Therapist</label>
+            <select id="therapist" name="therapist">
+                <option value="" disabled selected>Select Therapist</option>
+                <option value="therapist1">Therapist 1</option>
+                <option value="therapist2">Therapist 2</option>
+                <option value="therapist3">Therapist 3</option>
+            </select>
+
+            <label for="session-rating">Session Rating</label>
+            <select id="session-rating" name="session-rating">
+                <option value="" disabled selected>Rate the Session</option>
+                <option value="1">1 - Poor</option>
+                <option value="2">2 - Fair</option>
+                <option value="3">3 - Good</option>
+                <option value="4">4 - Very Good</option>
+                <option value="5">5 - Excellent</option>
+            </select>
+
+            <label for="comments">Comments</label>
+            <textarea id="comments" name="comments" placeholder="Share your feedback..."></textarea>
+
+            <label for="improvements">Suggestions for Improvement</label>
+            <textarea id="improvements" name="improvements" placeholder="Any suggestions for improvement?"></textarea>
+
+            <button type="submit" class="submit-btn">Submit Feedback</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Email using JavaScript</title>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+<body>
+    <h2>Send Email using JavaScript</h2>
+    <form method="post">
+        <input type="button" value="Send Email" onclick="sendEmail()" />
+    </form>
+
+    <script type="text/javascript">
+        function sendEmail() {
+            Email.send({
+                Host: "smtp.gmail.com",
+                Username: "pradiptatalukdar2@gmail.com",
+                Password: "vfkw nqoz uliy jxgp",
+                To: 'it2022105@rcciit.org.in',
+                From: "pradiptatalukdar2@gmail.com",
+                Subject: "Sending Email using JavaScript",
+                Body: "This is a test email sent using JavaScript!",
+            })
+            .then(function (message) {
+                alert("Mail sent successfully");
+            });
+        }
+    </script>
+</body>
+</html>

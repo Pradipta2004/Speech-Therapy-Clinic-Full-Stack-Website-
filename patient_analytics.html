@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy Clinic Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .charts-container {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjust height to fit in the viewport */
+            overflow-y: auto; /* Allow vertical scrolling if needed */
+        }
+        .chart-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 25%; /* Adjust height for each chart */
+        }
+        canvas {
+            display: block;
+            max-width: 100%;
+            height: 300px; /* Medium-Large chart size */
+        }
+        .chart-description {
+            text-align: center;
+            margin-top: 10px;
+            color: #555;
+            font-size: 1.1em;
+            line-height: 1.5;
+            white-space: pre-wrap; /* Preserve formatting */
+        }
+        .typing-animation {
+            display: inline;
+            border-right: 2px solid #007bff;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #007bff; }
+        }
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Speech Therapy Clinic Dashboard</h1>
+        <div id="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Disease</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>10</td>
+                        <td>M</td>
+                        <td>Articulation Disorder</td>
+                        <td><button onclick="showCharts('John Doe')">Check Analytics</button></td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>8</td>
+                        <td>F</td>
+                        <td>Fluency Disorder</td>
+                        <td><button onclick="showCharts('Jane Smith')">Check Analytics</button></td>
+                    </tr>
+                    <tr>
+                        <td>Michael Johnson</td>
+                        <td>12</td>
+                        <td>M</td>
+                        <td>Voice Disorder</td>
+                        <td><button onclick="showCharts('Michael Johnson')">Check Analytics</button></td>
+                    </tr>
+                    <tr>
+                        <td>Emily Davis</td>
+                        <td>9</td>
+                        <td>F</td>
+                        <td>Phonological Disorder</td>
+                        <td><button onclick="showCharts('Emily Davis')">Check Analytics</button></td>
+                    </tr>
+                    <tr>
+                        <td>Daniel Wilson</td>
+                        <td>11</td>
+                        <td>M</td>
+                        <td>Language Disorder</td>
+                        <td><button onclick="showCharts('Daniel Wilson')">Check Analytics</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="charts-container" class="charts-container"></div>
+
+        <div id="loader" class="loader" style="display:none;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const descriptions = [
+            "For John Doe, the scatter plot reveals a consistent pattern of improvement in articulation scores over time. Despite some fluctuations, the overall trend shows positive progress, indicating effective therapy interventions. The data points demonstrate increased accuracy and fluency in speech, reflecting the patient's dedication to the therapy.",
+            "Jane Smith's histogram shows that the majority of her speech fluency scores fall within the moderate range, with a few outliers indicating occasional high and low performance. This distribution highlights the need for targeted interventions to address areas of inconsistency and further improve overall fluency.",
+            "Michael Johnson's radar chart illustrates balanced performance across different therapy areas, with notable strengths in articulation and voice control. However, there's a slight area of concern in phonological processing. The balanced approach suggests a well-rounded therapy plan with room for focused improvement.",
+            "Emily Davis's heat map indicates high activity levels in articulation exercises, with less engagement in phonological tasks. The color gradients reveal areas where therapy intensity has been higher, suggesting effective intervention strategies in specific areas, while also identifying less engaged aspects.",
+            "Daniel Wilson's scatter plot shows a high variability in language disorder metrics, suggesting that his progress is uneven. The varying data points point to the need for personalized therapy adjustments to address specific challenges and optimize treatment outcomes."
+        ];
+
+        function generateRandomData(size) {
+            return Array.from({ length: size }, () => Math.floor(Math.random() * 100));
+        }
+
+        function showCharts(patient) {
+            document.getElementById('table-container').style.display = 'none';
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                const chartsContainer = document.getElementById('charts-container');
+                chartsContainer.style.display = 'flex';
+                chartsContainer.innerHTML = '';
+
+                const chartTypes = ['Scatter Plot', 'Histogram', 'Radar Chart', 'Heat Map'];
+                let chartIndex = 0;
+
+                function createChart(type) {
+                    const chartContainer = document.createElement('div');
+                    chartContainer.className = 'chart-container';
+
+                    const canvas = document.createElement('canvas');
+                    const chartDescription = document.createElement('div');
+                    chartDescription.className = 'chart-description typing-animation';
+
+                    chartContainer.appendChild(canvas);
+                    chartContainer.appendChild(chartDescription);
+                    chartsContainer.appendChild(chartContainer);
+
+                    const data = generateRandomData(10);
+                    const labels = Array.from({ length: 10 }, (_, i) => `Data ${i+1}`);
+
+                    switch (type) {
+                        case 'Scatter Plot':
+                            new Chart(canvas, {
+                                type: 'scatter',
+                                data: {
+                                    datasets: [{
+                                        label: 'Speech Therapy Metrics',
+                                        data: data.map((y, x) => ({ x, y })),
+                                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        x: { 
+                                            beginAtZero: true,
+                                            title: { display: true, text: 'Session' }
+                                        },
+                                        y: { 
+                                            beginAtZero: true,
+                                            title: { display: true, text: 'Score' }
+                                        }
+                                    }
+                                }
+                            });
+                            chartDescription.innerText = descriptions[0];
+                            break;
+                        case 'Histogram':
+                            new Chart(canvas, {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Frequency of Scores',
+                                        data: data,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        x: { 
+                                            beginAtZero: true,
+                                            title: { display: true, text: 'Data Points' }
+                                        },
+                                        y: { 
+                                            beginAtZero: true,
+                                            title: { display: true, text: 'Frequency' }
+                                        }
+                                    }
+                                }
+                            });
+                            chartDescription.innerText = descriptions[1];
+                            break;
+                        case 'Radar Chart':
+                            new Chart(canvas, {
+                                type: 'radar',
+                                data: {
+                                    labels: ['Articulation', 'Fluency', 'Voice', 'Phonological', 'Language'],
+                                    datasets: [{
+                                        label: 'Performance Metrics',
+                                        data: data.slice(0, 5),
+                                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                                        borderColor: 'rgba(255, 159, 64, 1)',
+                                        borderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        r: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                            chartDescription.innerText = descriptions[2];
+                            break;
+                        case 'Heat Map':
+                            canvas.style.height = '300px'; // Adjust height for heat map
+                            // Placeholder for heat map (implementation depends on library used)
+                            chartDescription.innerText = descriptions[3];
+                            break;
+                    }
+
+                    // Show chart with animation
+                    setTimeout(() => {
+                        canvas.style.display = 'block';
+                        if (chartIndex < chartTypes.length - 1) {
+                            chartIndex++;
+                            setTimeout(() => createChart(chartTypes[chartIndex]), 2000);
+                        }
+                    }, 1000);
+                }
+
+                createChart(chartTypes[chartIndex]);
+            }, 1000); // Buffering delay
+        }
+    </script>
+</body>
+</html>

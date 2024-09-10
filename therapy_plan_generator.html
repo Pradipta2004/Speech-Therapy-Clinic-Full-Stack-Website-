@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy AI-Powered Therapy Plan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: url('bgimg.jpg') no-repeat center center fixed;                   /* background: url('https://via.placeholder.com/1920x1080') no-repeat center center fixed; */
+            background-size: cover;
+            color: #fff;
+            overflow-y: scroll;
+        }
+        h1, h2 {
+            color: #00bcd4;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .form-container, .submit-button, #generated-plan {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group, .diagnosis-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .diagnosis-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.diagnosis-group div {
+    display: flex;
+    flex-direction: column;
+}
+
+.diagnosis-group label {
+    margin-bottom: 5px; /* Add space between label and text box */
+    font-size: 1.2rem;
+    color: #00bcd4;
+}
+
+.diagnosis-group input {
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    font-size: 1rem;
+    width: 100%;
+    background: #333;
+    color: #fff;
+}
+
+        .form-group label, .diagnosis-group label {
+            font-size: 1.2rem;
+            color: #00bcd4;
+        }
+        .form-group input, .form-group textarea, .diagnosis-group input {
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            background: #1e1e1e;
+            color: #fff;
+        }
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .multiple-choice {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .multiple-choice label {
+            font-size: 1.1rem;
+            color: #00bcd4;
+        }
+        .multiple-choice div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .multiple-choice input {
+            accent-color: #00bcd4;
+        }
+        .diagnosis-group input {
+             width: 250px;               /* auto */
+            background: #333;
+        }
+        .submit-button {
+            text-align: right;
+        }
+        .submit-button button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .submit-button button:hover {
+            background: #00838f;
+            transform: scale(1.05);
+        }
+        #buffering {
+            display: none;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #00bcd4;
+            margin: 20px 0;
+        }
+        #buffering .loader {
+            border: 8px solid rgba(0,0,0,0.1);
+            border-left: 8px solid #00bcd4;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #generated-plan {
+            display: none;
+            margin-top: 20px;
+        }
+        #plan-components {
+            margin: 20px 0;
+        }
+        .component {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        .component h3 {
+            color: #00bcd4;
+        }
+        .component p {
+            margin: 0;
+            overflow-wrap: break-word;
+        }
+        .download-button {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .download-button button {
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: linear-gradient(135deg, #ff5722, #e64a19);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .download-button button:hover {
+            background: #d84315;
+            transform: scale(1.05);
+        }
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <h1>Speech Therapy AI-Powered Therapy Plan</h1>
+    <div class="form-container">
+        <div class="form-group">
+            <label for="symptoms">Enter your symptoms:</label>
+            <textarea id="symptoms" placeholder="Describe your symptoms here..."></textarea>
+        </div>
+        <div class="multiple-choice">
+            <label>Multiple Choice Questions:</label>
+            <div>
+                <label>1. What is your primary concern?</label>
+                <input type="radio" name="concern" value="articulation"> Articulation
+                <input type="radio" name="concern" value="fluency"> Fluency
+                <input type="radio" name="concern" value="voice"> Voice
+                <input type="radio" name="concern" value="language"> Language
+                <input type="radio" name="concern" value="pragmatic"> Pragmatic
+            </div>
+            <div>
+                <label>2. Do you experience difficulty in speaking clearly?</label>
+                <input type="radio" name="difficulty" value="yes"> Yes
+                <input type="radio" name="difficulty" value="no"> No
+            </div>
+            <div>
+                <label>3. How often do you have speech difficulties?</label>
+                <input type="radio" name="frequency" value="daily"> Daily
+                <input type="radio" name="frequency" value="weekly"> Weekly
+                <input type="radio" name="frequency" value="monthly"> Monthly
+                <input type="radio" name="frequency" value="rarely"> Rarely
+            </div>
+            <div>
+                <label>4. Do you have trouble with pronunciation?</label>
+                <input type="radio" name="pronunciation" value="yes"> Yes
+                <input type="radio" name="pronunciation" value="no"> No
+            </div>
+            <div>
+                <label>5. Do you find it hard to express yourself in conversations?</label>
+                <input type="radio" name="expression" value="yes"> Yes
+                <input type="radio" name="expression" value="no"> No
+            </div>
+        </div>
+        <div class="diagnosis-group">
+            <div>
+                <label for="articulation">Articulation Disorder:</label>
+                <input type="text" id="articulation" value="90%" readonly>
+            </div>
+            <div>
+                <label for="fluency">Fluency Disorder:</label>
+                <input type="text" id="fluency" value="75%" readonly>
+            </div>
+            <div>
+                <label for="voice">Voice Disorder:</label>
+                <input type="text" id="voice" value="60%" readonly>
+            </div>
+            <div>
+                <label for="language">Language Disorder:</label>
+                <input type="text" id="language" value="85%" readonly>
+            </div>
+            <div>
+                <label for="pragmatic">Pragmatic Disorder:</label>
+                <input type="text" id="pragmatic" value="70%" readonly>
+            </div>
+        </div>
+        
+        <div class="submit-button">
+            <button onclick="generatePlan()">Submit</button>
+        </div>
+    </div>
+    <div id="buffering">
+        <div class="loader"></div>
+        Generating your therapy plan...
+    </div>
+    <div id="generated-plan">
+        <h2>Generated Therapy Plan</h2>
+        <div id="plan-components"></div>
+    </div>
+    
+<div class="download-button">
+    <button onclick="downloadPDF()">Download PDF</button>
+</div>
+
+    <script>
+        const therapyPlanComponents = {
+            "Assessment": [
+                "Detailed assessment of articulation errors, including specific sound distortions and their impact on communication.",
+                "Evaluation of fluency patterns, including stuttering frequency, duration, and associated behaviors.",
+                "Assessment of voice quality, including pitch, volume, and resonance, as well as any vocal strain or discomfort.",
+                "Evaluation of language use, including vocabulary, grammar, and overall communicative effectiveness.",
+                "Assessment of pragmatic skills, including social interaction, understanding of social cues, and appropriate communication behaviors."
+            ],
+            "Goal Setting": [
+                "Establish clear articulation goals, such as improving specific sound productions and increasing overall speech intelligibility.",
+                "Set fluency goals, such as reducing the frequency of disfluencies and improving overall speech flow and smoothness.",
+                "Define voice-related goals, including enhancing vocal quality, reducing strain, and improving voice projection.",
+                "Develop language goals, such as expanding vocabulary, improving grammar, and enhancing language use in various contexts.",
+                "Create pragmatic goals, such as improving social interaction skills, understanding social cues, and increasing appropriate communication behaviors."
+            ],
+            "Individualized Treatment Plan": [
+                "Design a personalized articulation therapy plan, including targeted exercises, practice routines, and progress monitoring.",
+                "Develop a tailored fluency treatment plan, incorporating specific techniques, practice activities, and regular assessments.",
+                "Create an individualized voice therapy plan, including vocal exercises, lifestyle recommendations, and ongoing evaluation.",
+                "Outline a personalized language therapy plan, incorporating activities to target specific language deficits and enhance overall communication.",
+                "Develop a customized pragmatic therapy plan, including social skills activities, role-playing scenarios, and feedback sessions."
+            ],
+            "Therapy Activities": [
+                "Engage in articulation drills, including repetition of specific sounds, words, and sentences to improve sound production.",
+                "Participate in fluency-enhancing activities, such as controlled speech exercises, fluency shaping techniques, and practice in varied contexts.",
+                "Incorporate voice exercises, including pitch modulation, vocal warm-ups, and resonance enhancement activities.",
+                "Engage in language-building exercises, such as vocabulary expansion, grammar practice, and language comprehension activities.",
+                "Participate in social skills training, including role-playing, group discussions, and activities to improve social interactions and communication."
+            ],
+            "Progress Monitoring": [
+                "Regular tracking of articulation progress through periodic assessments, including recording and analyzing speech samples to monitor improvement.",
+                "Ongoing evaluation of fluency progress with frequency counts of disfluencies, self-reports, and feedback from significant others or teachers.",
+                "Monitoring of vocal health and quality through vocal assessments, patient feedback, and objective measures such as acoustic analysis.",
+                "Continuous review of language development through language assessments, progress reports, and observation of language use in various contexts.",
+                "Tracking of pragmatic skill development through social interactions, feedback from others, and assessment of social behavior in different settings."
+            ],
+            "Adjustments": [
+                "Modify articulation therapy activities based on patient progress, including adjusting difficulty levels and incorporating new exercises as needed.",
+                "Adjust fluency therapy techniques based on the patient’s response, including modifying strategies and introducing new approaches to address specific challenges.",
+                "Adapt voice therapy exercises and recommendations based on changes in vocal quality and patient feedback, ensuring ongoing alignment with therapy goals.",
+                "Revise language therapy activities to address evolving language needs and ensure continued engagement and progress in language development.",
+                "Update pragmatic therapy strategies based on observed social interactions and progress in pragmatic skills, incorporating new activities and techniques as needed."
+            ],
+            "Family Involvement": [
+                "Involve family members in articulation therapy by providing them with strategies to support practice at home and encouraging consistent reinforcement.",
+                "Engage family members in fluency therapy by educating them about fluency techniques and involving them in practice sessions to support the patient.",
+                "Include family in voice therapy by providing them with information about vocal care and encouraging them to support the patient in implementing voice-friendly habits.",
+                "Encourage family involvement in language therapy by sharing language-building activities and strategies for reinforcing language skills at home.",
+                "Involve family in pragmatic therapy by discussing social skills goals and providing guidance on how to support the patient’s social interactions in everyday situations."
+            ],
+            "Documentation": [
+                "Maintain detailed records of articulation therapy sessions, including progress notes, treatment activities, and patient responses.",
+                "Document fluency therapy progress through session notes, frequency counts, and patient feedback, tracking improvements and challenges.",
+                "Keep records of voice therapy sessions, including vocal assessments, exercises performed, and changes in vocal quality and patient reports.",
+                "Document language therapy progress with notes on vocabulary expansion, grammar improvements, and overall language use, including observations from therapy sessions.",
+                "Maintain documentation of pragmatic therapy progress, including social skills activities, observations of social interactions, and feedback from others."
+            ],
+            "Follow-up": [
+                "Schedule regular follow-up appointments to review articulation progress, adjust therapy plans as needed, and address any emerging challenges.",
+                "Plan follow-up sessions to monitor fluency improvements, assess the effectiveness of therapy techniques, and make necessary adjustments.",
+                "Arrange follow-up visits to evaluate vocal progress, provide ongoing support for vocal health, and modify therapy activities based on patient needs.",
+                "Schedule follow-up appointments to assess language development, review therapy goals, and make adjustments to the treatment plan as needed.",
+                "Plan follow-up sessions to review pragmatic skill development, provide additional support, and adjust therapy strategies based on progress and feedback."
+            ]
+        };
+
+        function generatePlan() {
+            document.getElementById('buffering').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('buffering').style.display = 'none';
+                const planComponentsDiv = document.getElementById('plan-components');
+                planComponentsDiv.innerHTML = '';
+                Object.keys(therapyPlanComponents).forEach((component) => {
+                    const componentDiv = document.createElement('div');
+                    componentDiv.className = 'component';
+                    const componentHeading = document.createElement('h3');
+                    componentHeading.innerText = component;
+                    componentDiv.appendChild(componentHeading);
+                    const componentParagraph = document.createElement('p');
+                    const paragraphs = therapyPlanComponents[component];
+                    componentParagraph.innerText = paragraphs[Math.floor(Math.random() * paragraphs.length)];
+                    componentDiv.appendChild(componentParagraph);
+                    planComponentsDiv.appendChild(componentDiv);
+                });
+                document.getElementById('generated-plan').style.display = 'block';
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // Smooth scroll to bottom
+            }, 2000); // Simulate buffering time
+        }
+            // DOwnload 
+
+            function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(16);
+            doc.text('Speech Therapy AI-Powered Therapy Plan', 20, 20);
+            
+            doc.setFontSize(12);
+            doc.text('Goals:', 20, 40);
+            doc.text(document.getElementById('goals-content').innerText, 20, 50);
+            
+            doc.text('Assessment:', 20, 70);
+            doc.text(document.getElementById('assessment-content').innerText, 20, 80);
+            
+            doc.text('Activities and Exercises:', 20, 100);
+            doc.text(document.getElementById('activities-content').innerText, 20, 110);
+            
+            doc.text('Materials and Resources:', 20, 130);
+            doc.text(document.getElementById('resources-content').innerText, 20, 140);
+            
+            doc.text('Progress Monitoring:', 20, 160);
+            doc.text(document.getElementById('progress-content').innerText, 20, 170);
+            
+            doc.save('therapy-plan.pdf');
+        }
+
+//download
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

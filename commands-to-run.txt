@@ -1,0 +1,16 @@
+Commands to run:
+Go to: https://getcomposer.org/download/
+Download the composer-setup.exe file
+double click on the exe file after download
+Click the tick on add this to your php path when installing
+Then go to your project folder in cmd and run 2 commands:
+
+composer require phpmailer/phpmailer
+
+composer require vlucas/phpdotenv
+
+Then create a .env file and paste this below code:
+GMAIL_USERNAME="email"
+GMAIL_PASSWORD="password"
+
+Change the mail and password

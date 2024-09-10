@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Speech Language Therapy Services</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assests/css/register.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // function showForm() {
+        //     var userType = document.getElementById("userType").value;
+        //     document.getElementById("patientForm").style.display = "none";
+        //     document.getElementById("therapistForm").style.display = "none";
+        //     document.getElementById("supervisorForm").style.display = "none";
+        //     document.getElementById("adminForm").style.display = "none";
+        //     if (userType == "patient") {
+        //         document.getElementById("patientForm").style.display = "block";
+        //     } else if (userType == "therapist") {
+        //         document.getElementById("therapistForm").style.display = "block";
+        //     } else if (userType == "supervisor") {
+        //         document.getElementById("supervisorForm").style.display = "block";
+        //     } else if (userType == "admin") {
+        //         document.getElementById("adminForm").style.display = "block";
+        //     }
+        // }
+        document.addEventListener('DOMContentLoaded', function() {
+            function showForm() {
+                var userType = document.getElementById("userType").value;
+                var forms = ['patientForm', 'therapistForm', 'supervisorForm', 'adminForm'];
+                forms.forEach(function(id) {
+                    document.getElementById(id).style.display = 'none';
+                });
+                if (userType) {
+                    document.getElementById(userType + 'Form').style.display = 'block';
+                }
+            }
+            document.getElementById("userType").addEventListener("change", showForm);
+            // Call showForm initially to ensure that no form is displayed if no user type is selected
+            showForm();
+        });
+    </script>
+</head>
+<body>
+    <div class="registration_header_container card">
+        <h2>Sign Up</h2>
+        <div class="user_selection_dropdown">
+            <label for="userType">Select User Type:</label>
+            <select id="userType" name="userType" onchange="showForm()" required>
+                <option value="">--Select User Type--</option>
+                <option value="patient">Patient</option>
+                <option value="therapist">Therapist</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+    </div>
+    <br><br>
+
+    <!-- Patient Registration Form -->
+    <!-- <form  action="patient_reg.php" method="post" style="display:none;">
+        <h3>Patient Registration</h3>
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br><br>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" placeholder="email" class="form-control form-control-lg" required><br><br>
+        <label for="contact">Contact No.:</label>
+        <input type="text" id="contact" name="contact" placeholder="email" class="form-control form-control-lg" required><br><br>
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" placeholder="email" class="form-control form-control-lg" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="email" class="form-control form-control-lg" required><br><br>
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="email" class="form-control form-control-lg" required><br><br>
+        <button type="button">Get OTP</button><br><br>
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" placeholder="email" class="form-control form-control-lg"><br><br>
+        <input type="submit" value="Sign Up">
+    </form> -->
+
+    <!-- New patient Reg -->
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-10" id="patientForm"  style="display:none;">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 d-none d-md-block">
+                <img src=""
+                  alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center form_div">
+                <div class="card-body p-4 p-lg-5 text-black">
+  
+                  <form action="patient_reg.php" method="post">
+  
+                    <div class="d-flex align-items-center mb-3 pb-1">
+                      <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                      <span class="h1 fw-bold mb-0">Speech Therapy</span>
+                    </div>
+  
+                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Register a new account for patient</h5>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="text" id="form2Example17" placeholder="Enter your Name" class="form-control form-control-lg" name="name" /> -->
+                      <input type="text" id="fullname" name="fullname" placeholder="Enter your Name" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Enter your real Name, so it will help others see who has or lost an item</label> -->
+                      <label class="form-label" for="fullname">Enter Your Full Name</label>
+                    </div>
+  
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="email" id="form2Example17" placeholder="email" class="form-control form-control-lg" name="email" /> -->
+                      <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Email address</label> -->
+                      <label class="form-label" for="gender">Gender</label>
+                    </div>
+  
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="contact" name="contact" placeholder="Contact Number" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="contact">Contact Number</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="email" id="email" name="email" placeholder="Email" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="email">Email ID</label>  
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="password" name="password" placeholder="Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="password">Make a strong Password</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="confirm_password">Confirm Password</label>
+                    </div>
+  
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit" id="getOtpButton">Get OTP</button>
+                    </div>
+                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="otp" name="otp" placeholder="OTP" class="form-control form-control-lg">
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="otp">Enter OTP</label>
+                    </div>
+
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit">Register</button>
+                      <!-- <input type="submit" class="btn1" value="Sign Up"> -->
+                    </div>
+
+                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a href="login.html"
+                        style="color: #393f81;">Login here</a></p>
+                    <a href="#!" class="small text-muted">Terms of use.</a>
+                    <a href="#!" class="small text-muted">Privacy policy</a>
+                  </form>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Therapist Registration Form -->
+<!--     <form id="therapistForm" action="therapist_reg.php" method="post" style="display:none;">
+        <h3>Therapist Registration</h3>
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br><br>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required><br><br>
+        <label for="contact">Contact No.:</label>
+        <input type="text" id="contact" name="contact" required><br><br>
+        <label for="license">Professional License Number:</label>
+        <input type="text" id="license" name="license" required><br><br>
+        <label for="education">Educational Background:</label>
+        <input type="text" id="education" name="education" required><br><br>
+        <label for="experience">Years of Experience:</label>
+        <input type="text" id="experience" name="experience" required><br><br>
+        <label for="specialization">Specializations:</label>
+        <input type="text" id="specialization" name="specialization" required><br><br>
+        <label for="certificate">Upload Certificate (.pdf):</label>
+        <input type="file" id="certificate" name="certificate" accept=".pdf" required><br><br>
+        <label for="photo">Upload photo (.png):</label>
+        <input type="file" id="photo" name="photo" accept=".png" required><br><br>
+        <label for="schedule">Work Schedule:</label>
+        <input type="text" id="schedule" name="schedule" required><br><br>
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+        <button type="button">Get OTP</button><br><br>
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp"><br><br>
+        <input type="submit" value="Sign Up">
+    </form> -->
+
+    <!-- New Therapist Reg -->
+    <div class="row d-flex justify-content-center align-items-center h-100" style="height: 2600px;">
+        <div class="col col-xl-10" id="therapistForm"  style="display:none;">
+          <div class="card" style="border-radius: 1rem; height: 2100px !important; margin-bottom: 200px; width: 1900px; margin-left: 160px;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 d-none d-md-block">
+                <img src=""
+                  alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center form_div">
+                <div class="card-body p-4 p-lg-5 text-black">
+  
+                  <form action="therapist_reg.php" method="post">
+  
+                    <div class="d-flex align-items-center mb-3 pb-1">
+                      <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                      <span class="h1 fw-bold mb-0">Speech Therapy</span>
+                    </div>
+  
+                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Register a new account for Therapist</h5>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="text" id="form2Example17" placeholder="Enter your Name" class="form-control form-control-lg" name="name" /> -->
+                      <input type="text" id="fullname" name="fullname" placeholder="Enter your Name" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Enter your real Name, so it will help others see who has or lost an item</label> -->
+                      <label class="form-label" for="fullname">Enter Your Full Name</label>
+                    </div>
+  
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="email" id="form2Example17" placeholder="email" class="form-control form-control-lg" name="email" /> -->
+                      <input type="date" id="dob" name="dob" placeholder="Date of Birth" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Email address</label> -->
+                      <label class="form-label" for="dob">Your Date of Birth</label>
+                    </div>
+                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="gender">Gender</label>
+                    </div>
+
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="contact" name="contact" placeholder="Contact Number" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="contact">Contact Number</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="license" name="license" placeholder="Your License Number" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="license">License Number</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="education" name="education" placeholder="Education Background" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="education">Your Education Background</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="experience" name="experience" placeholder="Experience" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="experience">Experience</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="specialization" name="specialization" placeholder="Your Specialization" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="specialization">Your specialization</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="file" id="certificate" name="certificate" accept=".pdf" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="certificate">Upload Your Licence in .pdf format</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="file" id="photo" name="photo" accept=".png" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="photo">Upload your photo in .png format</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="schedule" name="schedule" placeholder="Set your Schedule" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="schedule">Your Comfortable Schedule</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="email" id="email" name="email" placeholder="Email" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="email">Your Email ID</label>  
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="password" name="password" placeholder="Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="password">Make a strong Password</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="confirm_password">Confirm Password</label>
+                    </div>
+  
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit" id="getOtpButton">Get OTP</button>
+                    </div>
+                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="otp" name="otp" placeholder="OTP" class="form-control form-control-lg">
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="otp">Enter OTP</label>
+                    </div>
+
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit">Register</button>
+                      <!-- <input type="submit" class="btn1" value="Sign Up"> -->
+                    </div>
+
+                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a href="login.html"
+                        style="color: #393f81;">Login here</a></p>
+                    <a href="#!" class="small text-muted">Terms of use.</a>
+                    <a href="#!" class="small text-muted">Privacy policy</a>
+                  </form>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- Supervisor Registration Form -->
+<!--     <form id="supervisorForm" action="supervisor_reg.php" method="post" style="display:none;">
+        <h3>Supervisor Registration</h3>
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br><br>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required><br><br>
+        <label for="contact">Contact No.:</label>
+        <input type="text" id="contact" name="contact" required><br><br>
+        <label for="license">Professional License Number:</label>
+        <input type="text" id="license" name="license" required><br><br>
+        <label for="education">Educational Background:</label>
+        <input type="text" id="education" name="education" required><br><br>
+        <label for="experience">Years of Experience:</label>
+        <input type="text" id="experience" name="experience" required><br><br>
+        <label for="specialization">Specializations:</label>
+        <input type="text" id="specialization" name="specialization" required><br><br>
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+        <button type="button">Get OTP</button><br><br>
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp"><br><br>
+        <input type="submit" value="Sign Up">
+    </form>
+ -->
+    <!-- New Supervisor Reg -->
+    <div class="row d-flex justify-content-center align-items-center h-100" style="height: 2400px;">
+        <div class="col col-xl-10" id="supervisorForm"  style="display:none;">
+          <div class="card" style="border-radius: 1rem; width: 1700px !important; height: 1800px; margin-bottom: 200px; margin-left: 250px;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 d-none d-md-block">
+                <img src=""
+                  alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center form_div">
+                <div class="card-body p-4 p-lg-5 text-black">
+  
+                  <form action="supervisor_reg.php" method="post">
+  
+                    <div class="d-flex align-items-center mb-3 pb-1">
+                      <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                      <span class="h1 fw-bold mb-0">Speech Therapy</span>
+                    </div>
+  
+                    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Register a new account for Supervisor</h5>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="text" id="form2Example17" placeholder="Enter your Name" class="form-control form-control-lg" name="name" /> -->
+                      <input type="text" id="fullname" name="fullname" placeholder="Enter your Name" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Enter your real Name, so it will help others see who has or lost an item</label> -->
+                      <label class="form-label" for="fullname">Enter Your Full Name</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="email" id="form2Example17" placeholder="email" class="form-control form-control-lg" name="email" /> -->
+                      <input type="date" id="dob" name="dob" placeholder="dob" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Email address</label> -->
+                      <label class="form-label" for="dob">Your Date of Birth</label>
+                    </div>
+  
+  
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="email" id="form2Example17" placeholder="email" class="form-control form-control-lg" name="email" /> -->
+                      <input type="text" id="gender" name="gender" placeholder="Gender" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example17">Email address</label> -->
+                      <label class="form-label" for="gender">Gender</label>
+                    </div>
+  
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="number" id="contact" name="contact" placeholder="Contact Number" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="contact">Contact Number</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="number" id="license" name="license" placeholder="Your License Number" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="license">Your License Number</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="number" id="education" name="education" placeholder="Your Education" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="education">Your Education Background</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="number" id="experience" name="experience" placeholder="Your Experience" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="experience">Your Experience</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="number" id="specialization" name="specialization" placeholder="Your Specialization" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="specialization">Your Specialization</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="email" id="email" name="email" placeholder="Email" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="email">Email ID</label>  
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="password" name="password" placeholder="Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="password">Make a strong Password</label>
+                    </div>
+
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" class="form-control form-control-lg" required>
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label for="confirm_password">Confirm Password</label>
+                    </div>
+  
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit" id="getOtpButton">Get OTP</button>
+                    </div>
+                    
+                    <div data-mdb-input-init class="form-outline mb-4">
+                      <!-- <input type="password" id="form2Example27" placeholder="Create a strong password" class="form-control form-control-lg" name="passwd" /> -->
+                      <input type="text" id="otp" name="otp" placeholder="OTP" class="form-control form-control-lg">
+                      <!-- <label class="form-label" for="form2Example27">Password <br><br>Don't worry, We protect your privacy by selling all of your information to dark web 😊</label> -->
+                      <label class="form-label" for="otp">Enter OTP</label>
+                    </div>
+
+                    <div class="pt-1 mb-4">
+                      <button class="btn1" type="submit">Register</button>
+                      <!-- <input type="submit" class="btn1" value="Sign Up"> -->
+                    </div>
+
+                    <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a href="login.html"
+                        style="color: #393f81;">Login here</a></p>
+                    <a href="#!" class="small text-muted">Terms of use.</a>
+                    <a href="#!" class="small text-muted">Privacy policy</a>
+                  </form>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Admin Registration Form -->
+    <form id="adminForm" action="admin_reg.php" method="post" style="display:none;">
+        <h3>Admin Registration</h3>
+        <label for="fullname">Full Name:</label>
+        <input type="text" id="fullname" name="fullname" required><br><br>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender" required><br><br>
+        <label for="contact">Contact No.:</label>
+        <input type="text" id="contact" name="contact" required><br><br>
+        <label for="email">Email ID:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+        <button type="button" id="getOtpButton">Get OTP</button><br><br>
+        <label for="otp">Enter OTP</label>
+        <input type="text" id="otp" name="otp"><br><br>
+        <input type="submit" value="Sign Up">
+    </form>
+
+<script>
+    document.getElementById("getOtpButton").addEventListener("click", function() {
+        var email = document.getElementById("email").value;
+        if (email === '') {
+            alert('Please enter your email first.');
+            return;
+        }
+
+        // AJAX request to send the OTP
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "send_otp.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById("otpSession").value = xhr.responseText;
+                alert('OTP has been sent to your email.');
+            }
+        };
+        xhr.send("email=" + encodeURIComponent(email));
+    });
+</script>
+
+</body>
+</html>

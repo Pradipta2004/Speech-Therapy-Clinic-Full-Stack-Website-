@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        #video-container {
+            margin: 2rem auto;
+            max-width: 800px;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            background: #000;
+        }
+
+        #video-status {
+            display: none;
+            color: #ff4d4d;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        #controls {
+            margin-top: 1rem;
+        }
+
+        #controls button {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            margin: 0.5rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        #controls button:hover {
+            color: #007bff;
+        }
+
+        #controls #mic-btn {
+            font-size: 1.5rem;
+        }
+
+        #theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #decline-btn {
+            background-color: #ff4d4d;
+        }
+
+        #decline-btn:hover {
+            background-color: #d43f3f;
+        }
+
+        /* Dark theme styles */
+        body.dark {
+            background-color: #333;
+            color: #f0f2f5;
+        }
+
+        body.dark h1 {
+            background-color: #444;
+            color: white;
+        }
+
+        body.dark #video-container {
+            background: #555;
+        }
+
+        body.dark video {
+            background: #222;
+        }
+
+        body.dark #video-status {
+            color: #ff4d4d;
+        }
+
+        body.dark #controls button {
+            color: #f0f2f5;
+        }
+
+        body.dark #controls button:hover {
+            color: #007bff;
+        }
+
+        body.dark #decline-btn {
+            background-color: #b32d2d;
+        }
+
+        body.dark #decline-btn:hover {
+            background-color: #8e1f1f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Call</h1>
+    <button id="theme-toggle">Switch to Dark Theme</button>
+    <div id="video-container">
+        <video id="video" autoplay muted></video>
+        <div id="video-status">Video is off</div>
+        <div id="controls">
+            <button id="video-btn">📹</button>
+            <button id="mic-btn">🎤</button>
+            <button id="decline-btn">❌</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('video');
+            const videoBtn = document.getElementById('video-btn');
+            const micBtn = document.getElementById('mic-btn');
+            const declineBtn = document.getElementById('decline-btn');
+            const videoStatus = document.getElementById('video-status');
+            const themeToggle = document.getElementById('theme-toggle');
+            let isVideoOn = true;
+
+            // Simulate accessing webcam
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing webcam: ', error);
+                });
+
+            videoBtn.addEventListener('click', () => {
+                isVideoOn = !isVideoOn;
+                videoBtn.textContent = isVideoOn ? '📹' : '🔘'; // Toggle video icon
+                video.style.display = isVideoOn ? 'block' : 'none';
+                videoStatus.style.display = isVideoOn ? 'none' : 'block'; // Show status when video is off
+            });
+
+            micBtn.addEventListener('click', () => {
+                const isMicOn = micBtn.textContent === '🎤';
+                micBtn.textContent = isMicOn ? '🔇' : '🎤'; // Toggle mic icon
+                // Microphone control logic goes here
+            });
+
+            declineBtn.addEventListener('click', () => {
+                window.close(); // Close the video call window
+            });
+
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                themeToggle.textContent = document.body.classList.contains('dark') 
+                    ? 'Switch to Light Theme' 
+                    : 'Switch to Dark Theme';
+            });
+        });
+    </script>
+</body>
+</html>

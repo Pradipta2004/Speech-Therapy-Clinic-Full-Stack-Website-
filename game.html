@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Match Challenge</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('https://t3.ftcdn.net/jpg/03/08/71/84/240_F_308718440_Lsad7H4qi33o1ofctkV5CDNv51hiHbMS.jpg'), linear-gradient(145deg, #e0e0e0, #c6c6c6); /* Adding a subtle pattern and gradient */
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8); /* Light gray with transparency for modern look */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1), inset 0 5px 10px rgba(255, 255, 255, 0.7); /* 3D-like effect */
+        }
+
+        .target-word {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #4a4a4a; /* Dark gray for text */
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for text depth */
+        }
+
+        .words {
+            width: 80%;
+            height: 200px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px solid #0073e6; /* Blue border for professional touch */
+            background-color: #fff;
+            border-radius: 10px;
+            overflow-y: auto;
+            font-size: 20px;
+            text-align: center;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle inset shadow for depth */
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: #0073e6; /* Formal blue */
+            color: white;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0, 115, 230, 0.4), 0 4px 6px rgba(0, 0, 0, 0.2); /* 3D shadow effect */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+        .level-complete {
+            font-size: 26px;
+            margin-top: 20px;
+            color: #ffdf00;
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        .level {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold; /* Makes the text bold */
+    background-color: #ffeb3b; /* Highlight with a yellow background */
+    padding: 10px; /* Adds some padding to the background */
+    border-radius: 8px; /* Rounds the corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Adds a slight shadow for emphasis */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 
+                 -1px -1px 0px #fff, 
+                 1px 1px 1px #888; /* Creates the 3D effect with shadows */
+    transform: perspective(500px) rotateX(10deg); /* Adds a perspective tilt */
+}
+        button:hover {
+            background-color: #005bb5; /* Darker blue on hover */
+            transform: translateY(-3px); /* Lift effect */
+            box-shadow: 0 12px 24px rgba(0, 115, 230, 0.6); /* Stronger shadow on hover */
+        }
+
+        .result {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #28a745; /* Green for success message */
+            text-shadow: 1px 1px 5px rgba(40, 167, 69, 0.7);
+        }
+
+        /* Subtle glowing effect for target word on hover */
+        .target-word:hover {
+            color: #0073e6;
+            text-shadow: 0 0 10px rgba(0, 115, 230, 0.8), 0 0 20px rgba(0, 115, 230, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="container">
+        <div class="level" id="levelDisplay">Level: Easy</div>
+        <div class="target-word" id="targetWord">Press Start to Get a Word</div>
+        <div class="words" id="transcriptDisplay"></div>
+        <button id="toggleButton">Start Recognition</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Initialize Speech Recognition
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.interimResults = true;
+
+        const targetWords = ["Apple.", "Banana.", "Orange.", "Grape.", "Mango."];
+        let currentWord = "";
+        let recognizing = false;
+
+        const levelDisplay = document.getElementById('levelDisplay');
+        const targetWordElement = document.getElementById('targetWord');
+        const transcriptDisplay = document.getElementById('transcriptDisplay');
+        const resultDisplay = document.getElementById('result');
+        const toggleButton = document.getElementById('toggleButton');
+
+
+        function advanceLevel() {
+            if (currentLevel === "Easy") {
+                currentLevel = "Moderate";
+            } else if (currentLevel === "Moderate") {
+                currentLevel = "Hard";
+            } else {
+                currentLevel = "Game Over!";
+                toggleButton.disabled = true;
+            }
+
+            levelDisplay.textContent = "Level: " + currentLevel;
+            levelCompleteDisplay.style.display = "block";
+            score = 0;
+            scoreDisplay.textContent = "Score: " + score;
+        }
+
+        // Function to start the game
+        function startGame() {
+            // Select a random word
+            currentWord = targetWords[Math.floor(Math.random() * targetWords.length)];
+            targetWordElement.textContent = "Say this word: " + currentWord;
+            transcriptDisplay.textContent = "";
+            resultDisplay.textContent = "";
+        }
+
+        // Analyze the result
+        recognition.addEventListener('result', e => {
+            const transcript = Array.from(e.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+
+            transcriptDisplay.textContent = transcript;
+
+            if (e.results[0].isFinal) {
+                if (transcript.trim().toLowerCase() === currentWord.toLowerCase()) {
+                    resultDisplay.textContent = "Correct! Well done!";
+                } else {
+                    resultDisplay.textContent = "Incorrect. Try again!";
+                }
+                recognizing = false;
+                toggleButton.textContent = 'Start Recognition';
+            }
+        });
+
+        recognition.addEventListener('end', () => {
+            if (recognizing) recognition.start();
+        });
+
+        // Toggle recognition
+        toggleButton.addEventListener('click', () => {
+            if (!recognizing) {
+                startGame();
+                recognition.start();
+                toggleButton.textContent = 'Stop Recognition';
+            } else {
+                recognition.stop();
+                toggleButton.textContent = 'Start Recognition';
+            }
+            recognizing = !recognizing;
+        });
+    </script>
+</body>
+
+</html>

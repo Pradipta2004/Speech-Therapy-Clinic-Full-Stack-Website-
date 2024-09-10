@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapist Lookup</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .dropdown-content div {
+            padding: 12px 16px;
+            cursor: pointer;
+        }
+        .dropdown-content div:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        function fetchSuggestions() {
+            var input = document.getElementById('therapist_name').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'search_therapist.php?term=' + encodeURIComponent(input), true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var suggestions = JSON.parse(xhr.responseText);
+                    var dropdownContent = document.getElementById('dropdown').querySelector('.dropdown-content');
+                    dropdownContent.innerHTML = '';
+                    suggestions.forEach(function(suggestion) {
+                        var div = document.createElement('div');
+                        div.textContent = suggestion;
+                        div.onclick = function() {
+                            selectTherapist(suggestion);
+                        };
+                        dropdownContent.appendChild(div);
+                    });
+                    dropdownContent.style.display = suggestions.length ? 'block' : 'none';
+                }
+            };
+            xhr.send();
+        }
+        
+        function selectTherapist(name) {
+            document.getElementById('therapist_name').value = name;
+            document.getElementById('dropdown').querySelector('.dropdown-content').style.display = 'none';
+            fetchTherapistDetails(name);
+        }
+
+        function fetchTherapistDetails(name) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'search_therapist.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    var resultDiv = document.getElementById('therapist_details');
+                    if (data.error) {
+                        resultDiv.innerHTML = data.error;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <table>
+                                <tr><th>Full Name</th><td>${data.fullname}</td></tr>
+                                <tr><th>Date of Birth</th><td>${data.dob}</td></tr>
+                                <tr><th>Gender</th><td>${data.gender}</td></tr>
+                                <tr><th>Contact No.</th><td>${data.contact}</td></tr>
+                                <tr><th>License Number</th><td>${data.license}</td></tr>
+                                <tr><th>Education</th><td>${data.education}</td></tr>
+                                <tr><th>Experience</th><td>${data.experience}</td></tr>
+                                <tr><th>Specializations</th><td>${data.specialization}</td></tr>
+                                <tr><th>Photo</th><td>${data.photo ? data.photo : 'null'}</td></tr>
+                                <tr><th>Certificate</th><td>${data.certificate ? data.certificate : 'null'}</td></tr>
+                            </table>
+                        `;
+                    }
+                }
+            };
+            xhr.send('therapist_name=' + encodeURIComponent(name));
+        }
+        
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('#therapist_name')) {
+                document.getElementById('dropdown').querySelector('.dropdown-content').style.display = 'none';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Therapist Lookup</h1>
+        <div class="dropdown">
+            <input type="text" id="therapist_name" name="therapist_name" onkeyup="fetchSuggestions()" autocomplete="off" required>
+            <div class="dropdown-content" id="dropdown"></div>
+        </div>
+        <div id="therapist_details"></div>
+    </div>
+</body>
+</html>

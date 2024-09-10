@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Catalogs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            /* background: url('https://img.freepik.com/free-photo/futuristic-metaverse-empty-room-product-display-presentation-abstract-technology-scifi-with-neon-light-3d-background_56104-2314.jpg?w=996&t=st=1725600511~exp=1725601111~hmac=2c5f8258db4c294effe3ad9d3a3993d3e80c197f56326b5aa5d9136b222d5ff8'); */
+            background: url('https://img.freepik.com/free-photo/empty-dark-room-modern-futuristic-sci-fi-background-3d-illustration_35913-2390.jpg?t=st=1725600453~exp=1725601053~hmac=813ea3628e5a8f5fc0ec8f32c877286ed8ec7a0740e1869e8a2d16aefdfc1bb1');
+        }
+
+        .catalog-container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+        }
+
+        .catalog {
+            width: 250px;
+            height: 300px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            perspective: 1000px;
+        }
+
+        .catalog:hover {
+            transform: scale(1.05) rotateY(10deg);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .catalog img {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px 15px 0 0;
+            object-fit: cover;
+        }
+
+        .catalog-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .catalog h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .catalog p {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="catalog-container">
+
+    <a href="game.html">
+        <div class="catalog">
+            <img src="easy.png" alt="Catalog Image 1">
+            <div class="catalog-content">
+                <h3>Catalog 1</h3>
+                <p>Description for catalog 1</p>
+            </div>
+        </div>
+    </a>
+    
+    <a href="game2.html">
+        <div class="catalog">
+            <img src="medium.png" alt="Catalog Image 2">
+            <div class="catalog-content">
+                <h3>Catalog 2</h3>
+                <p>Description for catalog 2</p>
+            </div>
+        </div>
+    </a>
+    <a href="game3.html">
+        <div class="catalog">
+            <img src="hard.png" alt="Catalog Image 3">
+            <div class="catalog-content">
+                <h3>Catalog 3</h3>
+                <p>Description for catalog 3</p>
+            </div>
+        </div>
+    </a>
+    <a href="game4.html">
+        <div class="catalog">
+            <img src="levelup.png" alt="Catalog Image 4">
+            <div class="catalog-content">
+                <h3>Catalog 4</h3>
+                <p>Description for catalog 4</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+</body>
+</html>
